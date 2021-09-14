@@ -1,13 +1,29 @@
-import { config } from 'config/constants';
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useContext, createContext } from 'react';
 import { vercelFetcher } from 'services/vercel';
+import { VercelUser } from 'types/vercel';
 
-export function useAuth() {
-  const [token, setToken] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const authContext = createContext<{
+  isAuthenticated: boolean;
+  login: (token: string) => void;
+  logout: VoidFunction;
+  user: VercelUser | null;
+}>({ user: null, login: () => {}, logout: () => {}, isAuthenticated: false });
+
+export function ProvideAuth({ children }) {
+  const auth = useProvideAuth();
+  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+}
+
+export const useAuth = () => {
+  return useContext(authContext);
+};
+
+function useProvideAuth() {
+  const [user, setUser] = useState(null);
+  const isAuthenticated = !!user;
 
   const login = async (token: string) => {
-    const res = await vercelFetcher(config.VERCEL_API_BASE + '/www/user', {
+    const res = await vercelFetcher('/www/user', {
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -15,17 +31,15 @@ export function useAuth() {
 
     if (!res.error) {
       window.localStorage.setItem('vercelToken', token);
-      setToken(token);
-      setIsAuthenticated(true);
+      setUser(res.user);
     } else if (res.error.code === 'forbidden') {
-      setIsAuthenticated(false);
+      setUser(null);
     }
   };
 
   const logout = () => {
     window.localStorage.removeItem('vercelToken');
-    setToken(null);
-    setIsAuthenticated(false);
+    setUser(null);
   };
 
   useEffect(() => {
@@ -36,5 +50,10 @@ export function useAuth() {
     }
   }, []);
 
-  return { login, logout, token, isAuthenticated };
+  return {
+    login,
+    user,
+    logout,
+    isAuthenticated,
+  };
 }

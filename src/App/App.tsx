@@ -1,16 +1,19 @@
 import { HashRouter as Router } from 'react-router-dom';
 import styles from './App.module.css';
 import { Routes } from '../Pages/Routes';
-import { useAuth } from 'hooks/useAuth';
+import { ProvideAuth } from 'hooks/useAuth';
+import Layout from 'components/Layout/Layout';
 
 function App() {
-  const { logout, isAuthenticated } = useAuth();
   return (
     <Router>
-      <main className={styles.App}>
-        {isAuthenticated && <button onClick={logout}>Log out</button>}
-        <Routes />
-      </main>
+      <ProvideAuth>
+        <Layout>
+          <main className={styles.App}>
+            <Routes />
+          </main>
+        </Layout>
+      </ProvideAuth>
     </Router>
   );
 }
