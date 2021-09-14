@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, shell } from 'electron';
 import * as isDev from 'electron-is-dev';
 import { TrayBuilder } from './TrayBuilder';
 
@@ -23,6 +23,12 @@ const createWindow = () => {
   mainWindow.loadURL(
     isDev ? 'http://localhost:3000' : `file://${__dirname}/../index.html`
   );
+
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
+
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   }

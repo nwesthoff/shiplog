@@ -17,15 +17,27 @@ export const vercelFetcher = async (url: string, options?: RequestInit) => {
   return res.json();
 };
 
+type TeamRequestProps = { teamId?: string };
+
+export const useVercelTeam = ({ teamId }: TeamRequestProps = {}) =>
+  useSWR<VercelTeam>(teamId ? `/v1/teams/${teamId}` : null, vercelFetcher);
+
 export const useVercelTeamList = () =>
   useSWR<{ teams: VercelTeam[] }>('/v1/teams', vercelFetcher);
 
 export const useVercelUser = () =>
   useSWR<{ user: VercelUser }>('/www/user', vercelFetcher);
 
-export const useVercelDeployment = ({ teamId }: { teamId?: string }) => {
+export const useVercelDeployment = ({
+  teamId,
+  limit,
+}: {
+  teamId?: string;
+  limit?: number;
+} = {}) => {
   const searchParams = new URLSearchParams();
   teamId && searchParams.append('teamId', teamId);
+  limit && searchParams.append('limit', limit.toString());
   const qs = searchParams.toString();
 
   return useSWR<{ deployments: VercelDeployment[] }>(

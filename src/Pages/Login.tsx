@@ -19,6 +19,14 @@ export default function Login(): ReactElement {
         <label htmlFor="password">Token</label>
         <input id="password" type="password" onChange={handleTokenChange} />
       </div>
+      <div>
+        <span>
+          <a href="https://vercel.com/account/tokens" target="blank">
+            Create Token
+          </a>{' '}
+          manually and paste above
+        </span>
+      </div>
       <button type="submit">Login</button>
     </form>
   );
