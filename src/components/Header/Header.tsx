@@ -1,5 +1,5 @@
 import { useAuth } from 'hooks/useAuth';
-import TeamList from 'components/TeamList';
+import TeamSelect from 'components/TeamSelect/TeamSelect';
 import { ReactElement } from 'react';
 import styles from './Header.module.css';
 
@@ -10,7 +10,7 @@ export default function Header(): ReactElement {
     <header className={styles.header}>
       {user ? (
         <nav className={styles.nav}>
-          <TeamList />
+          <TeamSelect />
           <button onClick={logout}>Log out</button>
         </nav>
       ) : (

@@ -8,7 +8,7 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     backgroundColor: 'white',
     width: 600,
-    height: 400,
+    height: 320,
     show: false,
     frame: false,
     fullscreenable: false,

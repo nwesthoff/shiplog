@@ -26,11 +26,13 @@ export default function Deployments(): ReactElement {
     });
 
   return (
-    <div>
-      <h2 style={{ marginTop: 0 }}>
-        {team?.name || user?.name} {deploymentsRefreshing && 'refreshing...'}
-      </h2>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+    <>
+      <header className={styles.deploymentHeader}>
+        <h1 style={{ marginTop: 0 }}>
+          {team?.name || user?.name} {deploymentsRefreshing && 'refreshing...'}
+        </h1>
+      </header>
+      <ul className={styles.deploymentList}>
         {deployments?.deployments &&
           deployments.deployments.length > 0 &&
           deployments.deployments.map((deployment) => (
@@ -55,6 +57,6 @@ export default function Deployments(): ReactElement {
             </li>
           ))}
       </ul>
-    </div>
+    </>
   );
 }

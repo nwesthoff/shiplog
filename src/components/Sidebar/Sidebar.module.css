@@ -1,0 +1,12 @@
+.sidebar {
+  background-color: var(--color-background);
+  overflow-y: auto;
+  padding: var(--space-16);
+  flex-shrink: 0;
+}
+
+.innerSidebar {
+  width: 10rem;
+  display: flex;
+  flex-flow: column;
+}

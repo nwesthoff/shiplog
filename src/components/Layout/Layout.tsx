@@ -1,4 +1,4 @@
-import Header from 'components/Header/Header';
+import Sidebar from 'components/Sidebar/Sidebar';
 import { ReactElement, ReactNode } from 'react';
 import styles from './Layout.module.css';
 
@@ -9,8 +9,8 @@ interface Props {
 export default function Layout({ children }: Props): ReactElement {
   return (
     <div className={styles.layout}>
-      <Header />
-      {children}
+      <Sidebar />
+      <main className={styles.main}>{children}</main>
     </div>
   );
 }

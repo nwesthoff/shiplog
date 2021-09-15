@@ -1,0 +1,35 @@
+.deploymentHeader {
+  padding: var(--space-16);
+  height: var(--space-64);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.deploymentList {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+  padding: 0 var(--space-16);
+}
+
+.deploymentLine {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin-bottom: var(--space-16);
+  gap: var(--space-16);
+}
+
+.statusCircle {
+  height: 0.7rem;
+  width: 0.7rem;
+  border-radius: 9999px;
+}
+
+.deploymentId {
+  margin: 0;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

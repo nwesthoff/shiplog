@@ -4,8 +4,9 @@ import { ReactElement, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useVercelTeamList } from 'services/vercel';
 import { localStore } from 'config/localStorage';
+import styles from './TeamSelect.module.scss';
 
-export default function TeamList(): ReactElement {
+export default function TeamSelect(): ReactElement {
   const [teamId, setTeamId] = useState<string>();
   const { user } = useAuth();
   const { data } = useVercelTeamList();
@@ -25,7 +26,11 @@ export default function TeamList(): ReactElement {
   }, [teamId, history, location]);
 
   return (
-    <select value={teamId} onChange={(e) => setTeamId(e.target.value)}>
+    <select
+      className={styles.teamSelect}
+      value={teamId}
+      onChange={(e) => setTeamId(e.target.value)}
+    >
       <optgroup label="Personal Account">
         <option label={user?.name} value={user?.uid} />
       </optgroup>
