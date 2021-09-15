@@ -1,5 +1,5 @@
 import { useAuth } from 'hooks/useAuth';
-import TeamList from 'Pages/TeamList';
+import TeamList from 'components/TeamList';
 import { ReactElement } from 'react';
 import styles from './Header.module.css';
 

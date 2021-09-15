@@ -27,9 +27,9 @@ export default function Deployments(): ReactElement {
 
   return (
     <div>
-      <Link to={paths.home}>back</Link>
-      {deploymentsRefreshing && 'refreshing'}
-      <h3>{team?.name || user?.name}</h3>
+      <h2 style={{ marginTop: 0 }}>
+        {team?.name || user?.name} {deploymentsRefreshing && 'refreshing...'}
+      </h2>
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {deployments?.deployments &&
           deployments.deployments.length > 0 &&
@@ -42,7 +42,8 @@ export default function Deployments(): ReactElement {
                 }}
               />
               <div>
-                <h4 style={{ margin: 0 }}>{deployment.name}</h4>
+                <h4 style={{ margin: 0, fontWeight: 'normal' }}>{deployment.name}</h4>
+                <h5 style={{ margin: 0 }}>{deployment.meta.githubCommitRef}</h5>
                 <a
                   target="blank"
                   href={'https://' + deployment.url}

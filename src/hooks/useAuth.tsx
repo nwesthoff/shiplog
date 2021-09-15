@@ -1,3 +1,4 @@
+import { localStore } from 'config/localStorage';
 import { useState, useEffect, useContext, createContext } from 'react';
 import { vercelFetcher } from 'services/vercel';
 import { VercelUser } from 'types/vercel';
@@ -30,7 +31,7 @@ function useProvideAuth() {
     });
 
     if (!res.error) {
-      window.localStorage.setItem('vercelToken', token);
+      window.localStorage.setItem(localStore.vercelToken, token);
       setUser(res.user);
     } else if (res.error.code === 'forbidden') {
       setUser(null);
@@ -38,12 +39,12 @@ function useProvideAuth() {
   };
 
   const logout = () => {
-    window.localStorage.removeItem('vercelToken');
+    window.localStorage.removeItem(localStore.vercelToken);
     setUser(null);
   };
 
   useEffect(() => {
-    const storedToken = window.localStorage.getItem('vercelToken');
+    const storedToken = window.localStorage.getItem(localStore.vercelToken);
 
     if (storedToken) {
       login(storedToken);
