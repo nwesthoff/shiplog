@@ -1,4 +1,4 @@
-import Deployments from 'Pages/Deployments/Deployments';
+import Deployments from 'Pages/Deployments/DeploymentList';
 import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';

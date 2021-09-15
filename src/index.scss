@@ -32,6 +32,7 @@
   --space-8: 0.5rem;
   --space-16: 1rem;
   --space-64: 4rem;
+  --space-128: 8rem;
 
   --radius-small: 4px;
 
@@ -41,9 +42,21 @@
   --color-faintly: #ddd;
   --color-barely: #eee;
 
+  --color-cyan: #50e3c2;
+  --color-red: #e00;
+  --color-orange: #f5a623;
+
   --font-small: 0.9rem;
   --font-body: 1rem;
   --font-title: 1.25rem;
+
+  @media (prefers-color-scheme: dark) {
+    --color-background: #000;
+    --color-foreground: #fff;
+    --color-muted: #888;
+    --color-faintly: #444;
+    --color-barely: #222;
+  }
 
   [data-theme='dark'] {
     --color-background: #000;
@@ -65,6 +78,15 @@ body {
 h1 {
   margin: 0;
   font-size: var(--font-title);
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-size: var(--font-body);
 }
 
 code {
