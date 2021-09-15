@@ -103,7 +103,7 @@ export type VercelDeployment = {
   name: string;
   url: string;
   created: number;
-  state: string;
+  state: 'READY' | 'ERROR' | 'CANCELED' | 'QUEUED' | 'BUILDING';
   type: string;
   creator: {
     uid: string;

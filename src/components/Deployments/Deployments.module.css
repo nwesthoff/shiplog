@@ -1,0 +1,13 @@
+.deploymentLine {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.statusCircle {
+  height: 0.7rem;
+  width: 0.7rem;
+  border-radius: 9999px;
+}

@@ -4,22 +4,18 @@ import { ReactElement } from 'react';
 import styles from './Header.module.css';
 
 export default function Header(): ReactElement {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <header className={styles.header}>
-      {user ? <NavLoggedIn /> : <h3 className={styles.logo}>VercelfService</h3>}
+      {user ? (
+        <nav className={styles.nav}>
+          <TeamList />
+          <button onClick={logout}>Log out</button>
+        </nav>
+      ) : (
+        <h3 className={styles.logo}>VercelfService</h3>
+      )}
     </header>
-  );
-}
-
-function NavLoggedIn(): ReactElement {
-  const { logout } = useAuth();
-
-  return (
-    <nav>
-      <button onClick={logout}>Log out</button>
-      <TeamList />
-    </nav>
   );
 }

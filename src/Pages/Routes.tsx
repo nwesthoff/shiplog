@@ -3,7 +3,6 @@ import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import Login from './Login';
-import TeamList from './TeamList';
 
 export const Routes = () => {
   const { user } = useAuth();
@@ -23,16 +22,16 @@ export const Routes = () => {
         <Login />
       </Route>
 
-      <Route path={paths.team} exact>
-        <Deployments />
-      </Route>
-
       <Route path={`${paths.team}/:teamId`}>
         <Deployments />
       </Route>
 
-      <Route exact path={paths.home}>
-        <TeamList />
+      <Route path={paths.team} exact>
+        <Deployments />
+      </Route>
+
+      <Route path={paths.home} exact>
+        <Deployments />
       </Route>
     </Switch>
   );

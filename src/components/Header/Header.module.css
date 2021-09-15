@@ -1,6 +1,14 @@
 .header {
+  position: sticky;
+  top: 0;
   background-color: black;
   padding: 0.5rem 1rem;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 .logo {
