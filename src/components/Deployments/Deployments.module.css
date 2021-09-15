@@ -11,3 +11,10 @@
   width: 0.7rem;
   border-radius: 9999px;
 }
+
+.deploymentId {
+  margin: 0;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

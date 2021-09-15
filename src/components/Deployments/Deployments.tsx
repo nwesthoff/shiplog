@@ -19,7 +19,11 @@ export default function Deployments(): ReactElement {
   const { data: team } = useVercelTeam({ teamId });
   const { user } = useAuth();
   const { data: deployments, isValidating: deploymentsRefreshing } =
-    useVercelDeploymentList({ teamId, limit: 20, swrOptions: { refreshInterval: 10 } });
+    useVercelDeploymentList({
+      teamId,
+      limit: 20,
+      swrOptions: { refreshInterval: 10000 },
+    });
 
   return (
     <div>
@@ -39,7 +43,13 @@ export default function Deployments(): ReactElement {
               />
               <div>
                 <h4 style={{ margin: 0 }}>{deployment.name}</h4>
-                <p style={{ margin: 0 }}>{deployment.uid}</p>
+                <a
+                  target="blank"
+                  href={'https://' + deployment.url}
+                  className={styles.deploymentId}
+                >
+                  {deployment.uid}
+                </a>
               </div>
             </li>
           ))}

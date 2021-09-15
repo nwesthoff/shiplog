@@ -6,14 +6,15 @@ let mainWindow: BrowserWindow | null = null;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    backgroundColor: '#1a3d53',
-    width: 440,
-    height: 730,
+    backgroundColor: 'white',
+    width: 600,
+    height: 400,
     show: false,
     frame: false,
     fullscreenable: false,
     resizable: false,
     webPreferences: {
+      nativeWindowOpen: true,
       devTools: isDev,
       nodeIntegration: true,
       backgroundThrottling: false,
@@ -34,7 +35,8 @@ const createWindow = () => {
   }
 };
 
-let Tray = null;
+let Tray: TrayBuilder | null = null;
+
 app.whenReady().then(() => {
   createWindow();
   Tray = new TrayBuilder(mainWindow);
