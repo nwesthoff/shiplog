@@ -1,21 +1,21 @@
-import { useAuth } from 'hooks/useAuth';
-import TeamSelect from 'components/TeamSelect/TeamSelect';
 import { ReactElement } from 'react';
-import styles from './Header.module.css';
+import styles from './Header.module.scss';
+import { ReactNode, useContext } from 'react';
+import { ScrollProvider } from 'components/Layout/Layout';
 
-export default function Header(): ReactElement {
-  const { user, logout } = useAuth();
+interface Props {
+  children: ReactNode;
+}
+
+export default function Header({ children }: Props): ReactElement {
+  const { layoutScrolled } = useContext(ScrollProvider);
 
   return (
-    <header className={styles.header}>
-      {user ? (
-        <nav className={styles.nav}>
-          <TeamSelect />
-          <button onClick={logout}>Log out</button>
-        </nav>
-      ) : (
-        <h3 className={styles.logo}>VercelfService</h3>
-      )}
-    </header>
+    <div>
+      <div style={{ height: 'var(--space-64)', width: '100%' }} />
+      <header className={`${styles.header} ${layoutScrolled && styles.scrolled}`}>
+        {children}
+      </header>
+    </div>
   );
 }

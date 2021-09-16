@@ -3,7 +3,7 @@ import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import Login from './Login';
-import Settings from './Settings';
+import Settings from './Settings/Settings';
 
 export const Routes = () => {
   const { user } = useAuth();

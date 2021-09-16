@@ -14,7 +14,7 @@ export default function Layout({ children }: Props): ReactElement {
 
   function onScroll() {
     const scrollTop = scrollRef?.current?.scrollTop;
-    setLayoutScrolled((scrollTop || 0) > 5);
+    setLayoutScrolled((scrollTop || 0) > 10);
   }
 
   useEffect(() => {

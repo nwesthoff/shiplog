@@ -1,4 +1,5 @@
 import Chip from 'components/Chip/Chip';
+import Header from 'components/Header/Header';
 import { ScrollProvider } from 'components/Layout/Layout';
 import { useAuth } from 'hooks/useAuth';
 import { ReactElement, useContext } from 'react';
@@ -23,7 +24,7 @@ export default function Deployments(): ReactElement {
 
   return (
     <>
-      <header className={`${styles.dplHeader} ${layoutScrolled && styles.scrolled}`}>
+      <Header>
         <h1 style={{ marginTop: 0 }}>{teamData?.name || user?.name}</h1>
         {deploymentsRefreshing ? (
           layoutScrolled ? (
@@ -40,7 +41,7 @@ export default function Deployments(): ReactElement {
             </Chip>
           )
         ) : null}
-      </header>
+      </Header>
       {deploymentData && deploymentData.deployments.length > 0 && (
         <ul className={styles.dplList}>
           {deploymentData.deployments.map((deployment) => (
