@@ -1,8 +1,9 @@
 import Button from 'components/Button/Button';
 import { ReactElement } from 'react';
 import { VercelDeployment } from 'types/vercel';
-import styles from './Deployments.module.css';
-import { FiArrowUpRight } from 'react-icons/fi';
+import styles from './Deployments.module.scss';
+import { FiArrowUpRight, FiGitBranch } from 'react-icons/fi';
+import { formatDistance } from 'date-fns';
 
 const stateColorMap = {
   READY: 'var(--color-cyan)',
@@ -21,47 +22,67 @@ export default function DeploymentItem({
   ...props
 }: VercelDeployment & Props): ReactElement {
   return (
-    <li className={styles.deploymentLine} key={props.uid}>
+    <li className={styles.dplLine} key={props.uid}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <h3 className={styles.commitMessage}>{props.meta.githubCommitMessage}</h3>
-        <a target="blank" href={'https://' + props.url} className={styles.propsId}>
-          <h5 className={styles.commitRef}>{props.meta.githubCommitRef}</h5>
-        </a>
+        <div className={styles.commitRef}>
+          <FiGitBranch />
+          <a target="blank" href={'https://' + props.url} className={styles.dplId}>
+            <h5 className={styles.dplCommitRefText}>{props.meta.githubCommitRef}</h5>
+          </a>
+        </div>
         <h3 className={styles.projectProps}>
           {props.name} by {props.creator.username}
         </h3>
       </div>
-      <div
-        style={{
-          width: 'var(--space-128)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-end',
-          gap: 'var(--space-8)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-8)' }}>
-          <div
-            className={styles.statusCircle}
-            style={{
-              backgroundColor: stateColorMap[props.state] || 'gray',
-            }}
-          />
-          {props.state}
+      <div className={styles.dplSidebar}>
+        <div className={styles.dplInfo}>
+          <div className={styles.dplState}>
+            <div
+              className={styles.statusCircle}
+              style={{
+                backgroundColor: stateColorMap[props.state] || 'gray',
+              }}
+            />
+            <p>{props.state.toLowerCase()}</p>
+          </div>
+          <div>
+            {formatDistance(props.created, new Date(), { includeSeconds: true }).replace(
+              'about',
+              ''
+            )}
+          </div>
         </div>
         <div style={{ display: 'flex', gap: 'var(--space-8)' }}>
-          <Button target="blank" href={'https://' + props.url}>
-            Visit
-          </Button>
-          <Button
-            target="blank"
-            href={`https://vercel.com/${team}/${props.name}/${props.uid.replace(
-              'dpl_',
-              ''
-            )}`}
-          >
-            <FiArrowUpRight />
-          </Button>
+          {props.state === 'READY' ? (
+            <>
+              <Button target="blank" href={'https://' + props.url}>
+                Visit
+              </Button>
+              <Button
+                variant="outlined"
+                target="blank"
+                href={`https://vercel.com/${team}/${props.name}/${props.uid.replace(
+                  'dpl_',
+                  ''
+                )}`}
+              >
+                <FiArrowUpRight />
+              </Button>
+            </>
+          ) : (
+            <Button
+              variant="outlined"
+              target="blank"
+              href={`https://vercel.com/${team}/${props.name}/${props.uid.replace(
+                'dpl_',
+                ''
+              )}`}
+            >
+              Details
+              <FiArrowUpRight />
+            </Button>
+          )}
         </div>
       </div>
     </li>

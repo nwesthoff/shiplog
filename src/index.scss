@@ -1,4 +1,5 @@
-@import './utils/modern-normalize.css';
+@import './styles/modern-normalize.css';
+@import './styles/animations.scss';
 
 @font-face {
   font-family: 'Inter';
@@ -28,11 +29,14 @@
 }
 
 :root {
+  --space-4: 0.375rem;
   --space-6: 0.375rem;
   --space-8: 0.5rem;
   --space-16: 1rem;
+  --space-32: 2rem;
   --space-64: 4rem;
   --space-128: 8rem;
+  --space-160: 10rem;
 
   --radius-small: 4px;
 
@@ -75,6 +79,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  color: var(--color-foreground);
+}
+
 h1 {
   margin: 0;
   font-size: var(--font-title);
@@ -84,7 +92,8 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+p {
   margin: 0;
   font-size: var(--font-body);
 }

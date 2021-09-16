@@ -1,11 +1,16 @@
+import Chip from 'components/Chip/Chip';
+import { ScrollProvider } from 'components/Layout/Layout';
 import { useAuth } from 'hooks/useAuth';
-import { ReactElement } from 'react';
+import { ReactElement, useContext } from 'react';
+import { FiRefreshCw } from 'react-icons/fi';
 import { useParams } from 'react-router';
 import { useVercelDeploymentList, useVercelTeam } from 'services/vercel';
 import DeploymentItem from './DeploymentItem';
-import styles from './Deployments.module.css';
+import styles from './Deployments.module.scss';
 
 export default function Deployments(): ReactElement {
+  const { layoutScrolled } = useContext(ScrollProvider);
+
   const { teamId } = useParams<{ teamId: string }>();
   const { data: teamData } = useVercelTeam({ teamId });
   const { user } = useAuth();
@@ -18,13 +23,17 @@ export default function Deployments(): ReactElement {
 
   return (
     <>
-      <header className={styles.deploymentHeader}>
-        <h1 style={{ marginTop: 0 }}>
-          {teamData?.name || user?.name} {deploymentsRefreshing && 'refreshing...'}
-        </h1>
+      <header className={`${styles.dplHeader} ${layoutScrolled && styles.scrolled}`}>
+        <h1 style={{ marginTop: 0 }}>{teamData?.name || user?.name}</h1>
+        {deploymentsRefreshing && (
+          <Chip>
+            Refreshing
+            <FiRefreshCw style={{ animation: 'rotating 1.5s linear infinite' }} />
+          </Chip>
+        )}
       </header>
       {deploymentData && deploymentData.deployments.length > 0 && (
-        <ul className={styles.deploymentList}>
+        <ul className={styles.dplList}>
           {deploymentData.deployments.map((deployment) => (
             <DeploymentItem
               team={teamData?.slug || user?.username || ''}

@@ -11,4 +11,5 @@
   background: var(--color-background);
   color: var(--color-foreground);
   border-left: 1px solid var(--color-barely);
+  flex-grow: 1;
 }

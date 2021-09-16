@@ -1,11 +1,16 @@
 import { AnchorHTMLAttributes, ReactElement } from 'react';
-import styles from './Button.module.css';
+import styles from './Button.module.scss';
 
-export default function Button(
-  props: AnchorHTMLAttributes<HTMLAnchorElement>
-): ReactElement {
+interface Props {
+  variant?: 'default' | 'outlined';
+}
+
+export default function Button({
+  variant,
+  ...props
+}: AnchorHTMLAttributes<HTMLAnchorElement> & Props): ReactElement {
   return (
-    <a className={styles.button} {...props}>
+    <a className={`${styles.button} ${variant && styles[variant]}`} {...props}>
       {props.children}
     </a>
   );

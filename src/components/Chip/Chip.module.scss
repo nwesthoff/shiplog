@@ -1,0 +1,9 @@
+.chip {
+  padding: var(--space-6) var(--space-8);
+  background-color: var(--color-barely);
+  color: var(--color-muted);
+  border-radius: var(--radius-small);
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+}
