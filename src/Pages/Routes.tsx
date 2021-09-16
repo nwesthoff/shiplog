@@ -3,6 +3,7 @@ import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import Login from './Login';
+import Settings from './Settings';
 
 export const Routes = () => {
   const { user } = useAuth();
@@ -18,6 +19,10 @@ export const Routes = () => {
 
   return (
     <Switch location={location} key={location.pathname}>
+      <Route path={paths.settings} exact>
+        <Settings />
+      </Route>
+
       <Route exact path={paths.login}>
         <Login />
       </Route>

@@ -25,12 +25,21 @@ export default function Deployments(): ReactElement {
     <>
       <header className={`${styles.dplHeader} ${layoutScrolled && styles.scrolled}`}>
         <h1 style={{ marginTop: 0 }}>{teamData?.name || user?.name}</h1>
-        {deploymentsRefreshing && (
-          <Chip>
-            Refreshing
-            <FiRefreshCw style={{ animation: 'rotating 1.5s linear infinite' }} />
-          </Chip>
-        )}
+        {deploymentsRefreshing ? (
+          layoutScrolled ? (
+            <FiRefreshCw
+              style={{
+                color: 'var(--color-muted)',
+                animation: 'rotating 1.5s linear infinite',
+              }}
+            />
+          ) : (
+            <Chip>
+              Refreshing
+              <FiRefreshCw style={{ animation: 'rotating 1.5s linear infinite' }} />
+            </Chip>
+          )
+        ) : null}
       </header>
       {deploymentData && deploymentData.deployments.length > 0 && (
         <ul className={styles.dplList}>

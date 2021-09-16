@@ -1,3 +1,5 @@
+export type ReadyState = string;
+
 export type VercelUser = {
   uid: string;
   email: string;
@@ -8,7 +10,7 @@ export type VercelUser = {
   date: string;
   platformVersion: null;
   billing: {
-    plan: 'hobby' | 'pro';
+    plan: string;
     period: null;
     trial: null;
     cancelation: null;
@@ -23,7 +25,7 @@ export type VercelUser = {
   website: string;
   stagingPrefix: string;
   resourceConfig: { concurrentBuilds: number };
-  importFlowGitProvider: 'github';
+  importFlowGitProvider: string;
   importFlowGitNamespaceId: string;
 };
 
@@ -55,7 +57,7 @@ export type VercelTeam = {
   updatedAt: number;
   avatar: string;
   membership: {
-    role: 'MEMBER' | 'ADMIN' | 'OWNER';
+    role: string;
     confirmed: true;
     created: number;
     createdAt: number;
@@ -64,7 +66,7 @@ export type VercelTeam = {
   };
   platformVersion: number;
   billing: {
-    plan: 'pro' | 'hobby';
+    plan: string;
     period: { start: number; end: number };
     trial: null;
     cancelation: null;
@@ -88,7 +90,7 @@ export type VercelTeam = {
       };
     };
     subscriptions: VercelSubscription[];
-    currency: 'usd' | 'eur';
+    currency: string;
   };
   description: null;
   profiles: [];
@@ -103,7 +105,9 @@ export type VercelDeployment = {
   name: string;
   url: string;
   created: number;
-  state: 'READY' | 'ERROR' | 'CANCELED' | 'QUEUED' | 'BUILDING';
+  buildingAt: number;
+  state: ReadyState;
+  ready?: number;
   type: string;
   creator: {
     uid: string;
@@ -125,6 +129,84 @@ export type VercelDeployment = {
     githubRepoId: string;
     githubCommitAuthorLogin: string;
   };
-  target: 'production' | 'staging';
+  target: string;
   aliasAssigned?: boolean;
+};
+
+export type VercelLambda = {
+  id: string;
+  createdAt: number;
+  entrypoint: null;
+  readyState: string;
+  readyStateAt?: number;
+  output: LambdaOutput[];
+};
+
+export type LambdaOutput = {
+  path: string;
+  functionName: string;
+};
+
+export type VercelBuild = {
+  alias: string[];
+  aliasAssigned: boolean;
+  aliasError: null;
+  bootedAt: number;
+  buildingAt: number;
+  createdAt: number;
+  creator: {
+    uid: string;
+    username: string;
+  };
+  gitSource: {
+    ref: string;
+    repoId: number;
+    sha: string;
+    type: string;
+    prId: null;
+  };
+  id: string;
+  initReadyAt: number;
+  lambdas: VercelLambda[];
+  name: string;
+  meta: {
+    githubCommitAuthorName: string;
+    githubCommitMessage: string;
+    githubCommitOrg: string;
+    githubCommitRef: string;
+    githubCommitRepo: string;
+    githubCommitRepoId: string;
+    githubCommitSha: string;
+    githubDeployment: string;
+    githubOrg: string;
+    githubRepo: string;
+    githubRepoId: string;
+    githubCommitAuthorLogin: string;
+  };
+  public: false;
+  ready: number;
+  readyState: string;
+  regions: [string];
+  source: string;
+  status: string;
+  target: string;
+  team: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+  type: string;
+  url: string;
+  version: 2;
+  build: {
+    env: string[];
+  };
+  builds: [];
+  createdIn: string;
+  env: string[];
+  functions: null;
+  inspectorUrl: string;
+  ownerId: string;
+  plan: string;
+  projectId: string;
 };

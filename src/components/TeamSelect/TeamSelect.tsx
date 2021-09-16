@@ -13,23 +13,26 @@ export default function TeamSelect(): ReactElement {
   const history = useHistory();
   const location = useLocation();
 
-  useEffect(() => {
-    const lastTeamId = localStorage.getItem(localStore.lastOpenTeamId);
-    lastTeamId && setTeamId(lastTeamId);
-  }, []);
-
-  useEffect(() => {
+  function onChange(teamId: string) {
     if (teamId && !location.pathname.includes(teamId)) {
+      setTeamId(teamId);
       localStorage.setItem(localStore.lastOpenTeamId, teamId);
       history.push(`${paths.team}/${teamId.includes('team') ? teamId : ''}`);
     }
-  }, [teamId, history, location]);
+  }
+
+  useEffect(() => {
+    const lastTeamId = localStorage.getItem(localStore.lastOpenTeamId);
+    lastTeamId &&
+      (location.pathname.includes('/team') || location.pathname === '/') &&
+      onChange(lastTeamId);
+  }, []);
 
   return (
     <select
       className={styles.teamSelect}
       value={teamId}
-      onChange={(e) => setTeamId(e.target.value)}
+      onChange={(e) => onChange(e.target.value)}
     >
       <optgroup label="Personal Account">
         <option label={user?.name} value={user?.uid} />

@@ -1,7 +1,7 @@
 import { config } from 'config/constants';
 import useSWR from 'swr';
 import { PublicConfiguration } from 'swr/dist/types';
-import { VercelDeployment, VercelTeam, VercelUser } from 'types/vercel';
+import { VercelBuild, VercelDeployment, VercelTeam, VercelUser } from 'types/vercel';
 
 export const vercelFetcher = async (url: string, options?: RequestInit) => {
   const token = window.localStorage.getItem('vercelToken');
@@ -44,8 +44,20 @@ export const useVercelDeploymentList = ({
   const qs = searchParams.toString();
 
   return useSWR<{ deployments: VercelDeployment[] }>(
-    '/v5/now/deployments?' + qs,
+    '/v6/now/deployments?' + qs,
     vercelFetcher,
     swrOptions
   );
+};
+
+export const useVercelBuild = (
+  url: string,
+  { limit, swrOptions }: { limit: number; swrOptions?: Partial<PublicConfiguration> }
+) => {
+  const searchParams = new URLSearchParams();
+  url && searchParams.append('url', url);
+  limit && searchParams.append('limit', limit.toString());
+  const qs = searchParams.toString();
+
+  return useSWR<VercelBuild>('/v13/now/deployments/get?' + qs, vercelFetcher, swrOptions);
 };
