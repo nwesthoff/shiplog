@@ -5,11 +5,13 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  width: var(--space-160);
   justify-content: space-between;
 }
 
 .innerSidebar {
-  width: 10rem;
   display: flex;
-  flex-flow: column;
+  flex-grow: 1;
+  justify-content: flex-start;
+  flex-direction: column;
 }

@@ -2,7 +2,7 @@ import { AnchorHTMLAttributes, ReactElement } from 'react';
 import styles from './Button.module.scss';
 
 interface Props {
-  variant?: 'default' | 'outlined';
+  variant?: 'default' | 'outlined' | 'transparent';
 }
 
 export default function Button({

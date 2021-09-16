@@ -7,7 +7,6 @@ import { localStore } from 'config/localStorage';
 import styles from './TeamSelect.module.scss';
 
 export default function TeamSelect(): ReactElement {
-  const [teamId, setTeamId] = useState<string>();
   const { user } = useAuth();
   const { data } = useVercelTeamList();
   const history = useHistory();
@@ -15,7 +14,6 @@ export default function TeamSelect(): ReactElement {
 
   function onChange(teamId: string) {
     if (teamId && !location.pathname.includes(teamId)) {
-      setTeamId(teamId);
       localStorage.setItem(localStore.lastOpenTeamId, teamId);
       history.push(`${paths.team}/${teamId.includes('team') ? teamId : ''}`);
     }
@@ -23,15 +21,13 @@ export default function TeamSelect(): ReactElement {
 
   useEffect(() => {
     const lastTeamId = localStorage.getItem(localStore.lastOpenTeamId);
-    lastTeamId &&
-      (location.pathname.includes('/team') || location.pathname === '/') &&
-      onChange(lastTeamId);
+    lastTeamId && location.pathname === '/' && onChange(lastTeamId);
   }, []);
 
   return (
     <select
       className={styles.teamSelect}
-      value={teamId}
+      value={location.pathname.replace('/team/', '')}
       onChange={(e) => onChange(e.target.value)}
     >
       <optgroup label="Personal Account">

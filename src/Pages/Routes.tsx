@@ -4,10 +4,15 @@ import { useAuth } from 'hooks/useAuth';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import Login from './Login';
 import Settings from './Settings/Settings';
+import Layout from 'components/Layout/Layout';
 
 export const Routes = () => {
   const { user } = useAuth();
   const location = useLocation();
+
+  if (location.pathname === paths.home) {
+    return <Redirect to={paths.team} />;
+  }
 
   if (!user && location.pathname !== paths.login) {
     return <Redirect to={paths.login} />;
@@ -20,23 +25,33 @@ export const Routes = () => {
   return (
     <Switch location={location} key={location.pathname}>
       <Route path={paths.settings} exact>
-        <Settings />
+        <Layout>
+          <Settings />
+        </Layout>
       </Route>
 
       <Route exact path={paths.login}>
-        <Login />
+        <Layout>
+          <Login />
+        </Layout>
+      </Route>
+
+      <Route path={`${paths.team}/:teamId/:projectId`}>
+        <Layout>
+          <Deployments />
+        </Layout>
       </Route>
 
       <Route path={`${paths.team}/:teamId`}>
-        <Deployments />
+        <Layout>
+          <Deployments />
+        </Layout>
       </Route>
 
       <Route path={paths.team} exact>
-        <Deployments />
-      </Route>
-
-      <Route path={paths.home} exact>
-        <Deployments />
+        <Layout>
+          <Deployments />
+        </Layout>
       </Route>
     </Switch>
   );

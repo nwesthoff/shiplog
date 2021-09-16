@@ -11,11 +11,8 @@ export default function Header({ children }: Props): ReactElement {
   const { layoutScrolled } = useContext(ScrollProvider);
 
   return (
-    <div>
-      <div style={{ height: 'var(--space-64)', width: '100%' }} />
-      <header className={`${styles.header} ${layoutScrolled && styles.scrolled}`}>
-        {children}
-      </header>
-    </div>
+    <header className={`${styles.header} ${layoutScrolled && styles.scrolled}`}>
+      {children}
+    </header>
   );
 }

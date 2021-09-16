@@ -210,3 +210,13 @@ export type VercelBuild = {
   plan: string;
   projectId: string;
 };
+
+export type VercelProject = {
+  id: string;
+  name: string;
+  accountId: string;
+  createdAt: number;
+  updatedAt: number;
+  targets: string;
+  latestDeployments: any[];
+};

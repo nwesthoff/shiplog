@@ -1,10 +1,9 @@
-import Chip from 'components/Chip/Chip';
 import Header from 'components/Header/Header';
 import { ScrollProvider } from 'components/Layout/Layout';
+import RefreshChip from 'components/RefreshChip/RefreshChip';
 import { useAuth } from 'hooks/useAuth';
 import { ReactElement, useContext } from 'react';
-import { FiRefreshCw } from 'react-icons/fi';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { useVercelDeploymentList, useVercelTeam } from 'services/vercel';
 import DeploymentItem from './DeploymentItem';
 import styles from './Deployments.module.scss';
@@ -13,44 +12,35 @@ export default function Deployments(): ReactElement {
   const { layoutScrolled } = useContext(ScrollProvider);
 
   const { teamId } = useParams<{ teamId: string }>();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const proj = params.get('proj');
+
   const { data: teamData } = useVercelTeam({ teamId });
   const { user } = useAuth();
-  const { data: deploymentData, isValidating: deploymentsRefreshing } =
-    useVercelDeploymentList({
-      teamId,
-      limit: 20,
-      swrOptions: { refreshInterval: 10000 },
-    });
+  const { data: dplData, isValidating: dplValidating } = useVercelDeploymentList({
+    teamId,
+    limit: 20,
+    swrOptions: { refreshInterval: 10000 },
+  });
 
   return (
     <>
       <Header>
         <h1 style={{ marginTop: 0 }}>{teamData?.name || user?.name}</h1>
-        {deploymentsRefreshing ? (
-          layoutScrolled ? (
-            <FiRefreshCw
-              style={{
-                color: 'var(--color-muted)',
-                animation: 'rotating 1.5s linear infinite',
-              }}
-            />
-          ) : (
-            <Chip>
-              Refreshing
-              <FiRefreshCw style={{ animation: 'rotating 1.5s linear infinite' }} />
-            </Chip>
-          )
-        ) : null}
+        {dplValidating && <RefreshChip showText={!layoutScrolled} />}
       </Header>
-      {deploymentData && deploymentData.deployments.length > 0 && (
+      {dplData && dplData.deployments.length > 0 && (
         <ul className={styles.dplList}>
-          {deploymentData.deployments.map((deployment) => (
-            <DeploymentItem
-              team={teamData?.slug || user?.username || ''}
-              key={deployment.uid}
-              {...deployment}
-            />
-          ))}
+          {dplData.deployments
+            .filter((dpl) => (proj ? dpl.name === proj : true))
+            .map((deployment) => (
+              <DeploymentItem
+                team={teamData?.slug || user?.username || ''}
+                key={deployment.uid}
+                {...deployment}
+              />
+            ))}
         </ul>
       )}
     </>
