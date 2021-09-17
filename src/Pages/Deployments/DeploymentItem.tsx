@@ -58,11 +58,18 @@ export default function DeploymentItem({
             />
             <p>{props.state.toLowerCase()}</p>
           </div>
-          {props.state === 'READY' && props.buildingAt && props.ready && (
-            <div>
-              {shortFormatDistance(formatDistanceStrict(props.buildingAt, props.ready))}
-            </div>
-          )}
+          {(props.state === 'READY' || props.state === 'BUILDING') &&
+            props.buildingAt &&
+            props.ready && (
+              <div>
+                {shortFormatDistance(
+                  formatDistanceStrict(
+                    props.buildingAt,
+                    props.state === 'READY' ? props.ready : new Date()
+                  )
+                )}
+              </div>
+            )}
         </div>
         <div style={{ display: 'flex', gap: 'var(--space-8)' }}>
           {props.state === 'READY' ? (
