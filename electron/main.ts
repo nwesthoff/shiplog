@@ -13,6 +13,7 @@ const createWindow = () => {
     frame: false,
     fullscreenable: false,
     resizable: false,
+    skipTaskbar: true,
     webPreferences: {
       nativeWindowOpen: true,
       devTools: isDev,
@@ -54,3 +55,5 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+process.platform === 'darwin' && app.dock.hide();
