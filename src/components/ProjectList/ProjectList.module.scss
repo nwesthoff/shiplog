@@ -5,6 +5,11 @@
   gap: var(--space-8);
 }
 
+.projectListItem {
+  list-style: none;
+  color: var(--color-foreground);
+}
+
 .innerProjButton {
   overflow: hidden;
   text-overflow: ellipsis;

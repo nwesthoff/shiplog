@@ -20,6 +20,7 @@ export default function Deployments(): ReactElement {
   const { user } = useAuth();
   const { data: dplData, isValidating: dplValidating } = useVercelDeploymentList({
     teamId,
+    projectId: proj || undefined,
     limit: 20,
     swrOptions: { refreshInterval: 10000 },
   });
@@ -33,7 +34,7 @@ export default function Deployments(): ReactElement {
       {dplData && dplData.deployments.length > 0 && (
         <ul className={styles.dplList}>
           {dplData.deployments
-            .filter((dpl) => (proj ? dpl.name === proj : true))
+            // .filter((dpl) => (proj ? dpl.name === proj : true))
             .map((deployment) => (
               <DeploymentItem
                 team={teamData?.slug || user?.username || ''}

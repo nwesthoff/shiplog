@@ -1,5 +1,7 @@
 import { app, BrowserWindow, shell } from 'electron';
 import * as isDev from 'electron-is-dev';
+import * as path from 'path';
+import { localStore } from '../src/config/localStorage';
 import { TrayBuilder } from './TrayBuilder';
 
 let mainWindow: BrowserWindow | null = null;
@@ -30,6 +32,16 @@ const createWindow = () => {
     shell.openExternal(url);
     return { action: 'deny' };
   });
+
+  const exeName = path.basename(process.execPath);
+  mainWindow.webContents
+    .executeJavaScript(`localStorage.getItem(${localStore.startAtLogin});`, true)
+    .then((result) => {
+      app.setLoginItemSettings({
+        openAtLogin: result,
+        args: ['--processStart', `"${exeName}"`, '--process-start-args', `"--hidden"`],
+      });
+    });
 
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: 'detach' });

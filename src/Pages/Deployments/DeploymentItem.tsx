@@ -3,9 +3,8 @@ import { ReactElement } from 'react';
 import { VercelDeployment } from 'types/vercel';
 import styles from './Deployments.module.scss';
 import { FiArrowUpRight, FiGitBranch } from 'react-icons/fi';
-import { formatDistance, formatDistanceStrict, formatDistanceToNow } from 'date-fns';
+import { formatDistanceStrict } from 'date-fns';
 import { shortFormatDistance } from 'utils/helpers/shortFormatDistance';
-import { useVercelBuild } from 'services/vercel';
 
 const stateColorMap = {
   READY: 'var(--color-cyan)',

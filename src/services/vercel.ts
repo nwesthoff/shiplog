@@ -37,15 +37,18 @@ export const useVercelUser = () =>
 
 export const useVercelDeploymentList = ({
   teamId,
+  projectId,
   limit,
   swrOptions,
 }: {
   teamId?: string;
+  projectId?: string;
   limit?: number;
   swrOptions?: Partial<PublicConfiguration>;
 } = {}) => {
   const searchParams = new URLSearchParams();
   teamId && searchParams.append('teamId', teamId);
+  projectId && searchParams.append('projectId', projectId);
   limit && searchParams.append('limit', limit.toString());
   const qs = searchParams.toString();
 

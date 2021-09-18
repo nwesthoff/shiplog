@@ -28,24 +28,13 @@ export default function ProjectList({ projects }: Props): ReactElement {
       {projects.length > 0 &&
         projects.map((dpl) => {
           return (
-            <li
-              key={dpl.id}
-              style={{ listStyle: 'none', color: 'var(--color-foreground)' }}
-            >
-              <LinkButton
-                variant={proj === dpl.name ? 'default' : 'transparent'}
-                to={`${paths.team}${teamId ? `/${teamId}` : ''}?proj=${dpl.name}`}
+            <li className={styles.projectListItem} key={dpl.id}>
+              <ProjectButton
+                variant={proj === dpl.id ? 'default' : 'transparent'}
+                to={`${paths.team}${teamId ? `/${teamId}` : ''}?proj=${dpl.id}`}
               >
-                <span
-                  style={{
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {dpl.name}
-                </span>
-              </LinkButton>
+                {dpl.name}
+              </ProjectButton>
             </li>
           );
         })}
