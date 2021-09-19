@@ -1,3 +1,5 @@
+[![main](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-master.yaml/badge.svg)](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml)
+
 # VercelfService
 
 A Mac Menu Bar application for watching your Vercel builds.
