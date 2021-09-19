@@ -14,15 +14,20 @@ export default function Sidebar(): ReactElement {
   const { data: projData } = useVercelProjectList({ teamId });
 
   return (
-    <aside className={styles.sidebar} data-theme="dark">
-      <div className={styles.innerSidebar}>
-        <TeamSelect />
-        {pathname.includes(paths.team) && projData && projData.projects.length > 0 && (
-          <ProjectList projects={projData.projects} />
-        )}
+    <aside className={styles.sidebarWrapper} data-theme="dark">
+      <div className={styles.sidebar}>
+        <div className={styles.innerSidebar}>
+          <TeamSelect />
+          {pathname.includes(paths.team) && projData && projData.projects.length > 0 && (
+            <ProjectList projects={projData.projects} />
+          )}
+        </div>
       </div>
-      <div>
-        <Link to={pathname === paths.settings ? paths.home : paths.settings}>
+      <div className={styles.settingsBg}>
+        <Link
+          style={{ pointerEvents: 'all' }}
+          to={pathname === paths.settings ? paths.home : paths.settings}
+        >
           <FiSettings />
         </Link>
       </div>

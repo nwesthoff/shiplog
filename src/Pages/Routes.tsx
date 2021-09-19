@@ -31,9 +31,7 @@ export const Routes = () => {
       </Route>
 
       <Route exact path={paths.login}>
-        <Layout>
-          <Login />
-        </Layout>
+        <Login />
       </Route>
 
       <Route path={`${paths.team}/:teamId/:projectId`}>
