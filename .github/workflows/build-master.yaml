@@ -25,6 +25,7 @@ jobs:
         uses: marvinpinto/action-automatic-releases
         with:
           prerelease: false
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          files: *.app
+          repo_token: '${{ secrets.GITHUB_TOKEN }}'
+          automatic_release_tag: 'latest'
+          files: |
+            *.app
