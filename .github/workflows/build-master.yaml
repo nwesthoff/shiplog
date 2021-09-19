@@ -1,0 +1,21 @@
+name: Create Stable Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_on_mac:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          ref: main
+      - uses: actions/setup-node@master
+        with:
+          node-version: 10.16
+      - name: Install dependencies
+        run: yarn install
+      - name: Build on MacOS
+        run: yarn make --arch x64,arm64
