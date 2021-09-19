@@ -22,7 +22,7 @@ jobs:
       - name: Build on MacOS arm64
         run: yarn make --arch arm64
       - name: Release
-        uses: marvinpinto/action-automatic-releases
+        uses: marvinpinto/action-automatic-releases@latest
         with:
           prerelease: false
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
