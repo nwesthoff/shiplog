@@ -20,9 +20,8 @@ jobs:
       - name: Build on MacOS
         run: yarn make --arch x64,arm64
       - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          prerelease: false
-          tag: latest
-          files: |
-            *.app
+         - uses: ncipollo/release-action@v1
+          with:
+            artifacts: "out/*.app"
+            prerelease: false
+            token: ${{ secrets.GITHUB_TOKEN }}
