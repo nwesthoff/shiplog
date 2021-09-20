@@ -24,7 +24,6 @@ jobs:
         with:
           files: |
             out/make/zip/darwin/**/*.zip
-            out/**/*.app
           prerelease: false
           automatic_release_tag: 'latest'
           title: 'Main Build'
