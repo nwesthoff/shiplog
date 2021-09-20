@@ -1,4 +1,4 @@
-[![main](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-master.yaml/badge.svg)](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml)
+[![Create Stable Build](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml/badge.svg?branch=main)](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml)
 
 # VercelfService
 
