@@ -1,4 +1,5 @@
-import { AnchorHTMLAttributes, ReactElement } from 'react';
+import { ReactElement } from 'react';
+import { ButtonHTMLAttributes } from 'react-router/node_modules/@types/react';
 import styles from './Button.module.scss';
 
 interface Props {
@@ -8,10 +9,10 @@ interface Props {
 export default function Button({
   variant,
   ...props
-}: AnchorHTMLAttributes<HTMLAnchorElement> & Props): ReactElement {
+}: ButtonHTMLAttributes<HTMLButtonElement> & Props): ReactElement {
   return (
-    <a className={`${styles.button} ${variant && styles[variant]}`} {...props}>
+    <button className={`${styles.button} ${variant && styles[variant]}`} {...props}>
       {props.children}
-    </a>
+    </button>
   );
 }

@@ -1,14 +1,16 @@
 import Sidebar from 'components/Sidebar/Sidebar';
 import { createContext, ReactElement, useEffect, useRef, useState } from 'react';
+import { ReactNode } from 'react-router/node_modules/@types/react';
 import styles from './Layout.module.css';
 
 interface Props {
-  children: ReactElement;
+  children: ReactNode;
+  sidebar?: boolean;
 }
 
 export const ScrollProvider = createContext({ layoutScrolled: false });
 
-export default function Layout({ children }: Props): ReactElement {
+export default function Layout({ children, sidebar = true }: Props): ReactElement {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [layoutScrolled, setLayoutScrolled] = useState(false);
 
@@ -23,8 +25,8 @@ export default function Layout({ children }: Props): ReactElement {
 
   return (
     <div className={styles.layout}>
-      <Sidebar />
       <ScrollProvider.Provider value={{ layoutScrolled }}>
+        {sidebar && <Sidebar />}
         <main className={styles.main} onScroll={onScroll} ref={scrollRef}>
           {children}
         </main>

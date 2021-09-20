@@ -32,13 +32,16 @@
   --space-4: 0.375rem;
   --space-6: 0.375rem;
   --space-8: 0.5rem;
+  --space-12: 0.75rem;
   --space-16: 1rem;
+  --space-24: 1.5rem;
   --space-32: 2rem;
   --space-64: 4rem;
   --space-128: 8rem;
   --space-160: 10rem;
 
-  --radius-small: 4px;
+  --radius-small: 6px;
+  --radius-full: 99999px;
 
   --color-background: #fff;
   --color-foreground: #000;
@@ -96,12 +99,22 @@ h2,
 h3,
 h4,
 h5,
-h6,
-p {
+h6 {
   font-weight: 500;
   margin: 0;
 }
 
+p {
+  margin: 0;
+  line-height: 1.4em;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
 }

@@ -8,7 +8,7 @@ import { useVercelDeploymentList, useVercelTeam } from 'services/vercel';
 import DeploymentItem from './DeploymentItem';
 import styles from './Deployments.module.scss';
 
-export default function Deployments(): ReactElement {
+export default function DeploymentList(): ReactElement {
   const { layoutScrolled } = useContext(ScrollProvider);
 
   const { teamId } = useParams<{ teamId: string }>();

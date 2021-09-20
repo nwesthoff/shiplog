@@ -1,9 +1,9 @@
-import Deployments from 'Pages/Deployments/DeploymentList';
+import Deployments from './Deployments';
 import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import Login from './Login';
-import Settings from './Settings/Settings';
+import Settings from '../components/Settings/Settings';
 import Layout from 'components/Layout/Layout';
 
 export const Routes = () => {

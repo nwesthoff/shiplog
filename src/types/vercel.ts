@@ -107,7 +107,7 @@ export type VercelDeployment = {
   created: number;
   buildingAt: number;
   state: ReadyState;
-  ready?: number;
+  ready: number;
   type: string;
   creator: {
     uid: string;

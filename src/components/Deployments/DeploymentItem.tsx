@@ -1,10 +1,10 @@
-import Button from 'components/Button/Button';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { VercelDeployment } from 'types/vercel';
 import styles from './Deployments.module.scss';
 import { FiArrowUpRight, FiGitBranch } from 'react-icons/fi';
 import { formatDistanceStrict } from 'date-fns';
 import { shortFormatDistance } from 'utils/helpers/shortFormatDistance';
+import AnchorButton from 'components/Button/AnchorButton';
 
 const stateColorMap = {
   READY: 'var(--color-cyan)',
@@ -21,11 +21,30 @@ interface Props {
 export default function DeploymentItem({
   team,
   created,
+  state,
+  ready,
+  buildingAt,
   ...props
 }: VercelDeployment & Props): ReactElement {
-  function getTimeSinceDeploy() {
-    return shortFormatDistance(formatDistanceStrict(created, new Date())) + ' ago';
-  }
+  const [buildTime, setBuildTime] = useState(
+    shortFormatDistance(
+      formatDistanceStrict(buildingAt, state === 'READY' ? ready : new Date())
+    )
+  );
+
+  useEffect(() => {
+    const timeSinceInterval = setInterval(() => {
+      setBuildTime(
+        shortFormatDistance(
+          formatDistanceStrict(buildingAt, state === 'READY' ? ready : new Date())
+        )
+      );
+    }, 1000);
+
+    return () => {
+      clearInterval(timeSinceInterval);
+    };
+  }, [buildingAt, ready, state]);
 
   return (
     <li className={styles.dplLine} key={props.uid}>
@@ -42,8 +61,9 @@ export default function DeploymentItem({
           </a>
         </div>
         <h3 className={styles.projectProps}>
-          <span className={styles.projectName}>{props.name}</span> {getTimeSinceDeploy()}{' '}
-          by {props.creator.username}
+          <span className={styles.projectName}>{props.name}</span>{' '}
+          {shortFormatDistance(formatDistanceStrict(created, new Date()))} ago by{' '}
+          {props.creator.username}
         </h3>
       </div>
       <div className={styles.dplSidebar}>
@@ -52,31 +72,22 @@ export default function DeploymentItem({
             <div
               className={styles.statusCircle}
               style={{
-                backgroundColor: stateColorMap[props.state] || 'gray',
+                backgroundColor: stateColorMap[state] || 'gray',
               }}
             />
-            <p>{props.state.toLowerCase()}</p>
+            <p>{state.toLowerCase()}</p>
           </div>
-          {(props.state === 'READY' || props.state === 'BUILDING') &&
-            props.buildingAt &&
-            props.ready && (
-              <div>
-                {shortFormatDistance(
-                  formatDistanceStrict(
-                    props.buildingAt,
-                    props.state === 'READY' ? props.ready : new Date()
-                  )
-                )}
-              </div>
-            )}
+          {(state === 'READY' || state === 'BUILDING') && buildingAt && (
+            <div>{buildTime}</div>
+          )}
         </div>
         <div style={{ display: 'flex', gap: 'var(--space-8)' }}>
-          {props.state === 'READY' ? (
+          {state === 'READY' ? (
             <>
-              <Button target="blank" href={'https://' + props.url}>
+              <AnchorButton target="blank" href={'https://' + props.url}>
                 Visit
-              </Button>
-              <Button
+              </AnchorButton>
+              <AnchorButton
                 variant="outlined"
                 target="blank"
                 href={`https://vercel.com/${team}/${props.name}/${props.uid.replace(
@@ -85,10 +96,10 @@ export default function DeploymentItem({
                 )}`}
               >
                 <FiArrowUpRight />
-              </Button>
+              </AnchorButton>
             </>
           ) : (
-            <Button
+            <AnchorButton
               variant="outlined"
               target="blank"
               href={`https://vercel.com/${team}/${props.name}/${props.uid.replace(
@@ -98,7 +109,7 @@ export default function DeploymentItem({
             >
               Details
               <FiArrowUpRight />
-            </Button>
+            </AnchorButton>
           )}
         </div>
       </div>

@@ -24,7 +24,6 @@
 
 .settingsBg {
   position: absolute;
-  padding: var(--space-16);
   background: linear-gradient(to top, var(--color-background) 45%, rgba(0, 0, 0, 0));
   width: 100%;
   bottom: 0;
