@@ -27,4 +27,4 @@ jobs:
           prerelease: false
           automatic_release_tag: 'latest'
           title: 'Main Build'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
