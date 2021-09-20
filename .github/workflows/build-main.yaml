@@ -20,7 +20,7 @@ jobs:
       - name: Build on MacOS
         run: yarn make --arch x64,arm64
       - name: Release
-         - uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1
           with:
             artifacts: "out/*.app"
             prerelease: false
