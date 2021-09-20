@@ -4,7 +4,6 @@ import styles from './LoginForm.module.scss';
 import Button from 'components/Button/Button';
 import Header from 'components/Header/Header';
 import Layout from 'components/Layout/Layout';
-import AnchorButton from 'components/Button/AnchorButton';
 
 export default function LoginForm(): ReactElement {
   const { login } = useAuth();
