@@ -18,14 +18,9 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Build on MacOS
-        run: yarn make --arch x64
-      - name: Build on MacOS arm64
-        run: yarn make --arch arm64
+        run: yarn make --arch x64,arm64
       - name: Release
-        uses: marvinpinto/action-automatic-releases@latest
+        uses: softprops/action-gh-release@v1
         with:
-          prerelease: false
-          repo_token: '${{ secrets.GITHUB_TOKEN }}'
-          automatic_release_tag: 'latest'
           files: |
             *.app
