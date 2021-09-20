@@ -1,6 +1,6 @@
 import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useVercelTeamList } from 'services/vercel';
 import { localStore } from 'config/localStorage';

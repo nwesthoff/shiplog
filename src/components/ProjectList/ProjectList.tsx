@@ -1,5 +1,4 @@
 import { ReactElement } from 'react';
-import LinkButton from 'components/Button/LinkButton';
 import { paths } from 'config/paths';
 import { VercelProject } from 'types/vercel';
 import { useLocation, useParams } from 'react-router';
