@@ -13,10 +13,6 @@ export default function LoginForm(): ReactElement {
     login(tokenValue);
   }
 
-  function handleTokenChange(e) {
-    setTokenValue(e.target.value);
-  }
-
   return (
     <Layout sidebar={false}>
       <Header>
@@ -65,7 +61,7 @@ export default function LoginForm(): ReactElement {
                       className={styles.tokenInput}
                       id="password"
                       type="password"
-                      onChange={handleTokenChange}
+                      onChange={(e) => setTokenValue(e.target.value)}
                     />
                     <Button type="submit">Login</Button>
                   </div>
