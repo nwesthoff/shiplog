@@ -23,7 +23,7 @@ jobs:
         uses: marvinpinto/action-automatic-releases@latest
         with:
           files: |
-            *.dmg
+            *.zip
           prerelease: false
           automatic_release_tag: 'latest'
           title: 'Main Build'
