@@ -23,7 +23,8 @@ jobs:
         uses: marvinpinto/action-automatic-releases@latest
         with:
           files: |
-            *.zip
+            out/make/zip/darwin/**/*.zip
+            out/**/*.app
           prerelease: false
           automatic_release_tag: 'latest'
           title: 'Main Build'
