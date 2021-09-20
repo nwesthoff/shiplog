@@ -22,5 +22,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
+          prerelease: false
+          tag: latest
           files: |
             *.app
