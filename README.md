@@ -1,6 +1,8 @@
-[![Create Stable Build](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml/badge.svg?branch=main)](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml)
+[![Build](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml/badge.svg)](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml)
 
 # VercelfService
+
+![VercelfService in Light and Dark](/.github/assets/light-dark-vercelfservice.gif)
 
 A Mac Menu Bar application for watching your Vercel builds.
 
