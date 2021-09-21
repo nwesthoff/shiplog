@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from 'react';
 import { VercelDeployment } from 'types/vercel';
 import styles from './Deployments.module.scss';
 import { FiArrowUpRight, FiGitBranch } from 'react-icons/fi';
-import { formatDistanceStrict } from 'date-fns';
+import { formatDistanceStrict, intervalToDuration } from 'date-fns';
 import { shortFormatDistance } from 'utils/helpers/shortFormatDistance';
 import AnchorButton from 'components/Button/AnchorButton';
 
@@ -26,19 +26,21 @@ export default function DeploymentItem({
   buildingAt,
   ...props
 }: VercelDeployment & Props): ReactElement {
-  const [buildTime, setBuildTime] = useState(
-    shortFormatDistance(
-      formatDistanceStrict(buildingAt, state === 'READY' ? ready : new Date())
-    )
-  );
+  const interval = intervalToDuration({
+    start: buildingAt,
+    end: state === 'READY' ? ready : new Date(),
+  });
+
+  const [buildTime, setBuildTime] = useState(`${interval.minutes}m ${interval.seconds}s`);
 
   useEffect(() => {
     const timeSinceInterval = setInterval(() => {
-      setBuildTime(
-        shortFormatDistance(
-          formatDistanceStrict(buildingAt, state === 'READY' ? ready : new Date())
-        )
-      );
+      const interval = intervalToDuration({
+        start: buildingAt,
+        end: state === 'READY' ? ready : new Date(),
+      });
+
+      setBuildTime(`${interval.minutes}m ${interval.seconds}s`);
     }, 1000);
 
     return () => {
