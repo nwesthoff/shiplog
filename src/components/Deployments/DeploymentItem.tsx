@@ -27,7 +27,7 @@ export default function DeploymentItem({
   ...props
 }: VercelDeployment & Props): ReactElement {
   const interval = intervalToDuration({
-    start: buildingAt,
+    start: buildingAt || new Date(),
     end: state === 'READY' ? ready : new Date(),
   });
 
@@ -36,7 +36,7 @@ export default function DeploymentItem({
   useEffect(() => {
     const timeSinceInterval = setInterval(() => {
       const interval = intervalToDuration({
-        start: buildingAt,
+        start: buildingAt || new Date(),
         end: state === 'READY' ? ready : new Date(),
       });
 
