@@ -1,5 +1,5 @@
 {
-  "name": "vercelfservice",
+  "name": "shiplog",
   "version": "1.0.0",
   "private": true,
   "main": "build/electron/main.js",
@@ -70,14 +70,14 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "name": "VercelfService",
+        "name": "Shiplog",
         "icon": "icons/icon.icns"
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "vercelfservice"
+            "name": "shiplog"
           }
         },
         {

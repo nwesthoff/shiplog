@@ -1,8 +1,8 @@
-[![Build](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml/badge.svg)](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml)
+[![Build](https://github.com/nwesthoff/shiplog/actions/workflows/build-main.yaml/badge.svg)](https://github.com/nwesthoff/shiplog/actions/workflows/build-main.yaml)
 
-# VercelfService
+# Shiplog
 
-![VercelfService in Light and Dark](/.github/assets/light-dark-vercelfservice.gif)
+![Shiplog in Light and Dark](/.github/assets/light-dark-shiplog.gif)
 
 A Mac Menu Bar application for watching your Vercel builds.
 
