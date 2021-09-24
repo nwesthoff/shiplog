@@ -1,5 +1,6 @@
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import * as isDev from 'electron-is-dev';
+import path = require('path');
 import { launchAtStartup } from './launchAtStartup';
 import { TrayBuilder } from './TrayBuilder';
 
@@ -18,7 +19,7 @@ const createWindow = () => {
     webPreferences: {
       nativeWindowOpen: true,
       devTools: isDev,
-      nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js'),
       backgroundThrottling: false,
     },
   });
@@ -60,3 +61,12 @@ app.on('activate', () => {
 });
 
 process.platform === 'darwin' && app.dock.hide();
+
+ipcMain.on('buildState', (_e, data) => {
+  console.log(data);
+  if (data === 'building') {
+    Tray?.tray && Tray.tray.setImage('./electron/assets/AnchorTemplate.png');
+  } else {
+    Tray?.tray && Tray.tray.setImage('./electron/assets/IconTemplate.png');
+  }
+});
