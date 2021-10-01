@@ -1,5 +1,5 @@
 {
-  "name": "vercelfservice",
+  "name": "shiplog",
   "version": "1.0.0",
   "private": true,
   "main": "build/electron/main.js",
@@ -51,10 +51,12 @@
     "@types/react": "^17.0.22",
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.1.9",
+    "@typescript-eslint/eslint-plugin": "^4.31.2",
     "concurrently": "^6.2.1",
     "copyfiles": "^2.4.1",
     "date-fns": "^2.24.0",
-    "electron": "^14.0.1",
+    "downshift": "^6.1.7",
+    "electron": "^15.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
@@ -69,14 +71,14 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "name": "VercelfService",
+        "name": "Shiplog",
         "icon": "icons/icon.icns"
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "vercelfservice"
+            "name": "shiplog"
           }
         },
         {

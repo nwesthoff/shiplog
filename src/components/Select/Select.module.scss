@@ -1,4 +1,4 @@
-.teamSelectButton {
+.selectButton {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -10,7 +10,7 @@
   padding: var(--space-6) var(--space-8);
 }
 
-.teamSelect {
+.select {
   position: absolute;
   list-style: none;
   background-color: var(--color-background);
@@ -25,7 +25,7 @@
   z-index: 5;
 }
 
-.teamSelectItem {
+.selectItem {
   border-radius: 3px;
   padding: var(--space-6) var(--space-16);
   cursor: pointer;

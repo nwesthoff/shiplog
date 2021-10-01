@@ -12,7 +12,6 @@ export default function Settings(): ReactElement {
   );
 
   function handleStartupChange(e) {
-    console.log(e.target.checked);
     setStartAtLogin(e.target.checked);
     window.localStorage.setItem(localStore.startAtLogin, e.target.checked.toString());
   }

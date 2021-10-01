@@ -51,7 +51,7 @@ export class TrayBuilder {
       {
         role: 'quit',
         accelerator: 'Command+Q',
-        label: 'Quit VercelfService',
+        label: 'Quit Shiplog',
       },
     ];
     this.tray.popUpContextMenu(Menu.buildFromTemplate(menu as any));

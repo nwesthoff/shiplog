@@ -20,6 +20,12 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 16
+      - name: Add MacOS Certificates
+        if: matrix.os == 'macOS-latest'
+        run: chmod +x ./scripts/add-osx-cert.sh && ./scripts/add-osx-cert.sh
+        env:
+          CERTIFICATE_OSX_APPLICATION: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
       - name: Install dependencies
         run: yarn install
       - name: Build on MacOS
