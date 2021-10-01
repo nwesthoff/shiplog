@@ -26,8 +26,10 @@ export const vercelFetcher = async (url: string, options?: RequestInit) => {
 
 type TeamRequestProps = { teamId?: string };
 
-export const useVercelTeam = ({ teamId }: TeamRequestProps = {}) =>
-  useSWR<VercelTeam>(teamId ? `/v1/teams/${teamId}` : null, vercelFetcher);
+export const useVercelTeam = ({ teamId }: TeamRequestProps = {}) => {
+  const id = teamId?.includes('team_') ? teamId : '';
+  return useSWR<VercelTeam>(teamId ? `/v1/teams/${id}` : null, vercelFetcher);
+};
 
 export const useVercelTeamList = () =>
   useSWR<{ teams: VercelTeam[] }>('/v1/teams', vercelFetcher);
@@ -47,7 +49,7 @@ export const useVercelDeploymentList = ({
   swrOptions?: Partial<PublicConfiguration>;
 } = {}) => {
   const searchParams = new URLSearchParams();
-  teamId && searchParams.append('teamId', teamId);
+  teamId?.includes('team_') && searchParams.append('teamId', teamId);
   projectId && searchParams.append('projectId', projectId);
   limit && searchParams.append('limit', limit.toString());
   const qs = searchParams.toString();
@@ -73,7 +75,7 @@ export const useVercelBuild = (
 
 export const useVercelProjectList = ({ teamId }: { teamId?: string }) => {
   const searchParams = new URLSearchParams();
-  teamId && searchParams.append('teamId', teamId);
+  teamId?.includes('team_') && searchParams.append('teamId', teamId);
   const qs = searchParams.toString();
 
   return useSWR<{ projects: VercelProject[] }>('/v8/projects?' + qs, vercelFetcher);

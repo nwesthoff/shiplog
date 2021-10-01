@@ -1,29 +1,37 @@
 import Deployments from './Deployments';
 import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import Login from './Login';
 import Settings from '../components/Settings/Settings';
 import Layout from 'components/Layout/Layout';
+import { localStore } from 'config/localStorage';
 
 export const Routes = () => {
   const { user } = useAuth();
   const location = useLocation();
+  const { pathname } = location;
 
-  if (location.pathname === paths.home) {
+  if (pathname === paths.home) {
+    const lastTeamId = localStorage.getItem(localStore.lastOpenTeamId);
+
+    if (lastTeamId) {
+      return <Redirect to={`${paths.team}/${lastTeamId}`} />;
+    }
+
     return <Redirect to={paths.team} />;
   }
 
-  if (!user && location.pathname !== paths.login) {
+  if (!user && pathname !== paths.login) {
     return <Redirect to={paths.login} />;
   }
 
-  if (user && location.pathname === paths.login) {
+  if (user && pathname === paths.login) {
     return <Redirect to={paths.home} />;
   }
 
   return (
-    <Switch location={location} key={location.pathname}>
+    <Switch location={location} key={pathname}>
       <Route path={paths.settings} exact>
         <Layout>
           <Settings />
