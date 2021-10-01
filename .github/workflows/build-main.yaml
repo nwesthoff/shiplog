@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 16
       - name: Add MacOS Certificates
-        if: matrix.os == 'macos-latest' && startsWith(github.ref, 'refs/tags/')
+        if: matrix.os == 'macOS-latest'
         run: chmod +x ./scripts/add-osx-cert.sh && ./scripts/add-osx-cert.sh
         env:
           CERTIFICATE_OSX_APPLICATION: ${{ secrets.CERTIFICATE_OSX_APPLICATION }}
