@@ -9,6 +9,7 @@
   top: 0;
   background-color: var(--color-background);
   transition: all 175ms ease-out;
+  border-bottom: 1px solid transparent;
 
   h1 {
     transform-origin: left center;

@@ -1,7 +1,6 @@
 import Header from 'components/Header/Header';
 import { ScrollProvider } from 'components/Layout/Layout';
 import RefreshChip from 'components/RefreshChip/RefreshChip';
-import { ipcRenderer } from 'electron';
 import { useAuth } from 'hooks/useAuth';
 import { ReactElement, useContext } from 'react';
 import { useLocation, useParams } from 'react-router';
@@ -9,6 +8,8 @@ import { useEffect } from 'react';
 import { useVercelDeploymentList, useVercelTeam } from 'services/vercel';
 import DeploymentItem from './DeploymentItem';
 import styles from './Deployments.module.scss';
+
+const PAGE_SIZE = 20;
 
 export default function DeploymentList(): ReactElement {
   const { layoutScrolled } = useContext(ScrollProvider);
@@ -20,15 +21,22 @@ export default function DeploymentList(): ReactElement {
 
   const { data: teamData } = useVercelTeam({ teamId });
   const { user } = useAuth();
-  const { data: dplData, isValidating: dplValidating } = useVercelDeploymentList({
+  const {
+    data: dplData,
+    isValidating: dplValidating,
+    size: dplPages,
+    setSize: setDplPages,
+  } = useVercelDeploymentList({
     teamId,
     projectId: proj || undefined,
-    limit: 20,
+    limit: PAGE_SIZE,
     swrOptions: { refreshInterval: 10000, refreshWhenHidden: true },
   });
 
+  const flatDpls = dplData?.flatMap((map) => map.deployments);
+
   useEffect(() => {
-    const dplState = !!dplData?.deployments.find((dpl) => dpl.state === 'BUILDING');
+    const dplState = !!flatDpls?.find((dpl) => dpl.state === 'BUILDING');
     if (dplState) {
       (window as any).ipc.send('buildState', 'building');
     } else {
@@ -42,17 +50,19 @@ export default function DeploymentList(): ReactElement {
         <h1 style={{ marginTop: 0 }}>{teamData?.name || user?.name}</h1>
         {dplValidating && <RefreshChip showText={!layoutScrolled} />}
       </Header>
-      {dplData && dplData.deployments.length > 0 && (
+      {flatDpls && flatDpls.length > 0 && (
         <ul className={styles.dplList}>
-          {dplData.deployments
-            // .filter((dpl) => (proj ? dpl.name === proj : true))
-            .map((deployment) => (
-              <DeploymentItem
-                team={teamData?.slug || user?.username || ''}
-                key={deployment.uid}
-                {...deployment}
-              />
-            ))}
+          {flatDpls.map((deployment, i) => (
+            <DeploymentItem
+              pageNext={() =>
+                i < flatDpls.length + PAGE_SIZE && setDplPages(dplPages + 1)
+              }
+              lastItem={flatDpls.length - 10 === i}
+              team={teamData?.slug || user?.username || ''}
+              key={deployment.uid}
+              {...deployment}
+            />
+          ))}
         </ul>
       )}
     </>

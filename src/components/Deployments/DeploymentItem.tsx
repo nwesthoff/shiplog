@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState, useRef } from 'react';
 import { VercelDeployment } from 'types/vercel';
 import styles from './Deployments.module.scss';
 import { FiArrowUpRight, FiGitBranch } from 'react-icons/fi';
@@ -16,6 +16,8 @@ const stateColorMap = {
 
 interface Props {
   team: string;
+  lastItem: boolean;
+  pageNext?: VoidFunction;
 }
 
 export default function DeploymentItem({
@@ -24,8 +26,28 @@ export default function DeploymentItem({
   state,
   ready,
   buildingAt,
+  lastItem,
+  pageNext,
   ...props
 }: VercelDeployment & Props): ReactElement {
+  const itemRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    if (lastItem && itemRef && pageNext) {
+      const observer = new IntersectionObserver((e) => {
+        if (e[0].isIntersecting) {
+          pageNext();
+        }
+      });
+
+      observer.observe(itemRef.current as HTMLLIElement);
+
+      return () => {
+        observer.disconnect();
+      };
+    }
+  }, [itemRef]);
+
   const interval = intervalToDuration({
     start: buildingAt || new Date(),
     end: state === 'READY' ? ready : new Date(),
@@ -49,7 +71,7 @@ export default function DeploymentItem({
   }, [buildingAt, ready, state]);
 
   return (
-    <li className={styles.dplLine} key={props.uid}>
+    <li ref={itemRef} className={styles.dplLine} key={props.uid}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <h3 className={styles.commitMessage}>{props.meta.githubCommitMessage}</h3>
         <div className={styles.commitRef}>

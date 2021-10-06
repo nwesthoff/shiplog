@@ -1,5 +1,6 @@
 import { config } from 'config/constants';
 import useSWR from 'swr';
+import useSWRInfinite from 'swr/infinite';
 import { PublicConfiguration } from 'swr/dist/types';
 import {
   VercelBuild,
@@ -37,6 +38,17 @@ export const useVercelTeamList = () =>
 export const useVercelUser = () =>
   useSWR<{ user: VercelUser }>('/www/user', vercelFetcher);
 
+const getKey = (pageIndex, previousPageData, qs) => {
+  // reached the end
+  if (previousPageData && !previousPageData.pagination.next) return null;
+
+  // first page, we don't have `previousPageData`
+  if (pageIndex === 0) return `/v6/now/deployments?${qs}`;
+
+  // add the cursor to the API endpoint
+  return `/v6/now/deployments?${qs}&from=${previousPageData.pagination.next}`;
+};
+
 export const useVercelDeploymentList = ({
   teamId,
   projectId,
@@ -54,8 +66,8 @@ export const useVercelDeploymentList = ({
   limit && searchParams.append('limit', limit.toString());
   const qs = searchParams.toString();
 
-  return useSWR<{ deployments: VercelDeployment[] }>(
-    '/v6/now/deployments?' + qs,
+  return useSWRInfinite<{ deployments: VercelDeployment[] }>(
+    (page, prevData) => getKey(page, prevData, qs),
     vercelFetcher,
     swrOptions
   );

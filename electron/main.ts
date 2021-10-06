@@ -33,6 +33,10 @@ const createWindow = () => {
     return { action: 'deny' };
   });
 
+  mainWindow.on('blur', () => {
+    mainWindow?.hide();
+  });
+
   !isDev && launchAtStartup(app, mainWindow);
 
   if (isDev) {
@@ -63,10 +67,9 @@ app.on('activate', () => {
 process.platform === 'darwin' && app.dock.hide();
 
 ipcMain.on('buildState', (_e, data) => {
-  console.log(data);
   if (data === 'building') {
-    Tray?.tray && Tray.tray.setImage('./electron/assets/AnchorTemplate.png');
+    Tray?.tray && Tray.tray.setImage(`${__dirname}/assets/IconBuildingTemplate.png`);
   } else {
-    Tray?.tray && Tray.tray.setImage('./electron/assets/IconTemplate.png');
+    Tray?.tray && Tray.tray.setImage(`${__dirname}/assets/IconDefaultTemplate.png`);
   }
 });
