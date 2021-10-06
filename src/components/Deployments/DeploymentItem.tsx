@@ -102,7 +102,7 @@ export default function DeploymentItem({
             <p>{state.toLowerCase()}</p>
           </div>
           {(state === 'READY' || state === 'BUILDING') && buildingAt && (
-            <div>{buildTime}</div>
+            <div className={styles.buildTime}>{buildTime}</div>
           )}
         </div>
         <div style={{ display: 'flex', gap: 'var(--space-8)' }}>
