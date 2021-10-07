@@ -54,9 +54,7 @@ export default function DeploymentList(): ReactElement {
         <ul className={styles.dplList}>
           {flatDpls.map((deployment, i) => (
             <DeploymentItem
-              pageNext={() =>
-                i < flatDpls.length + PAGE_SIZE && setDplPages(dplPages + 1)
-              }
+              pageNext={() => setDplPages(dplPages + 1)}
               lastItem={flatDpls.length - 10 === i}
               team={teamData?.slug || user?.username || ''}
               key={deployment.uid}

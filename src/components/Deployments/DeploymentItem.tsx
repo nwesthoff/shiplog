@@ -46,7 +46,7 @@ export default function DeploymentItem({
         observer.disconnect();
       };
     }
-  }, [itemRef]);
+  }, [itemRef, lastItem]);
 
   const interval = intervalToDuration({
     start: buildingAt || new Date(),
