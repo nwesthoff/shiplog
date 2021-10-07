@@ -1,4 +1,4 @@
-[![Build](https://github.com/nwesthoff/shiplog/actions/workflows/build-main.yaml/badge.svg)](https://github.com/nwesthoff/shiplog/actions/workflows/build-main.yaml)
+[![Build](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml/badge.svg)](https://github.com/nwesthoff/vercelfservice/actions/workflows/build-main.yaml)
 
 # Shiplog
 
