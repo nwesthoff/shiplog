@@ -74,8 +74,7 @@
         "name": "Shiplog",
         "icon": "icons/icon.icns",
         "osxSign": {
-          "identity": "Apple Development: zeno@quicknet (5PC6WK8F9D)",
-          "hardenedRuntime": true
+          "identity": "Apple Development: Zeno Kapitein (Zeno Kapitein)"
         }
       },
       "makers": [
