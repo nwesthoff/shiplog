@@ -1,13 +1,16 @@
 import { localStore } from 'config/localStorage';
 import { useState, useEffect, useContext, createContext } from 'react';
+import { netlifyFetcher } from 'services/netlify';
 import { vercelFetcher } from 'services/vercel';
+import { NetlifyUser } from 'types/netlify';
+import { Service } from 'types/services';
 import { VercelUser } from 'types/vercel';
 
 const authContext = createContext<{
   isAuthenticated: boolean;
-  login: (token: string) => void;
-  logout: VoidFunction;
-  user: VercelUser | null;
+  login: (token: string, service: Service) => void;
+  logout: (service?: Service) => void;
+  user: { vercel?: VercelUser; netlify?: NetlifyUser } | null;
 }>({ user: null, login: () => {}, logout: () => {}, isAuthenticated: false });
 
 export function ProvideAuth({ children }) {
@@ -20,35 +23,73 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
-  const [user, setUser] = useState(null);
-  const isAuthenticated = !!user;
+  const [user, setUser] = useState<{ vercel?: VercelUser; netlify?: NetlifyUser }>({});
+  const isAuthenticated = !!user.vercel || !!user.netlify;
 
-  const login = async (token: string) => {
-    const res = await vercelFetcher('/www/user', {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
+  const login = async (token: string, service: Service | Service[]) => {
+    if (service === 'vercel') {
+      const res = await vercelFetcher('/www/user', {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (!res.error) {
-      window.localStorage.setItem(localStore.vercelToken, token);
-      setUser(res.user);
-    } else if (res.error.code === 'forbidden') {
-      setUser(null);
+      if (!res.error) {
+        window.localStorage.setItem(localStore.vercelToken, token);
+        const newUser = { ...user, vercel: res.user };
+        setUser(newUser);
+        return newUser;
+      } else if (res.error.code === 'forbidden') {
+        logout('vercel');
+      }
+    } else if ('netlify') {
+      const res = await netlifyFetcher('/users', {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.error && res[0]) {
+        window.localStorage.setItem(localStore.netlifyToken, token);
+        const newUser = { ...user, netlify: res[0] };
+        setUser(newUser);
+        return newUser;
+      } else if (res.status === 401) {
+        logout('netlify');
+      }
+    } else {
+      throw Error(`Service ${service} not found`);
     }
   };
 
-  const logout = () => {
-    window.localStorage.removeItem(localStore.vercelToken);
-    setUser(null);
+  const logout = (service?: Service) => {
+    if (!service) {
+      window.localStorage.removeItem(localStore.netlifyToken);
+      window.localStorage.removeItem(localStore.vercelToken);
+      setUser({});
+    } else {
+      window.localStorage.removeItem(localStore[`${service}Token`]);
+      const newUser = user;
+      delete newUser?.[service];
+      setUser(newUser);
+    }
   };
+
+  async function restoreUsers() {
+    const storedVercelToken = window.localStorage.getItem(localStore.vercelToken);
+    const storedNetlifyToken = window.localStorage.getItem(localStore.netlifyToken);
+
+    const vercelUser = storedVercelToken
+      ? await login(storedVercelToken, 'vercel')
+      : undefined;
+    const netlifyUser = storedNetlifyToken
+      ? await login(storedNetlifyToken, 'netlify')
+      : undefined;
+    setUser({ vercel: vercelUser?.vercel, netlify: netlifyUser?.netlify });
+  }
 
   useEffect(() => {
-    const storedToken = window.localStorage.getItem(localStore.vercelToken);
-
-    if (storedToken) {
-      login(storedToken);
-    }
+    restoreUsers();
   }, []);
 
   return {

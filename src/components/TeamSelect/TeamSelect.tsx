@@ -8,18 +8,24 @@ import Select from 'components/Select/Select';
 
 export default function TeamSelect(): ReactElement {
   const { user } = useAuth();
-  const { data } = useVercelTeamList();
+  const { data: teamData } = useVercelTeamList();
   const history = useHistory();
   const location = useLocation();
-
-  const teamsAndUser = [{ id: user?.uid, name: user?.name }].concat(data?.teams || []);
+  const teamsAndUser = [
+    { id: user?.vercel?.uid, name: user?.vercel?.name, service: 'vercel' },
+    { id: user?.netlify?.id, name: user?.netlify?.full_name, service: 'netlify' },
+    ...(teamData?.teams.map((team) => {
+      return { ...team, service: 'vercel' };
+    }) || []),
+  ];
   const selectedItem =
     teamsAndUser.find((team) => team?.id && location.pathname.includes(team.id)) || user;
 
-  function onChange(teamId) {
-    if (teamId && !location.pathname.includes(teamId)) {
-      localStorage.setItem(localStore.lastOpenTeamId, teamId);
-      history.push(`${paths.team}/${teamId}`);
+  function onChange(team) {
+    console.log(team.service);
+    if (team.id && !location.pathname.includes(team.id)) {
+      localStorage.setItem(localStore.lastOpenTeamId, team.id);
+      history.push(`${paths.team}/${team.service}/${team.id}`);
     }
   }
 
@@ -27,7 +33,7 @@ export default function TeamSelect(): ReactElement {
     <Select
       items={teamsAndUser}
       defaultSelectedItem={selectedItem}
-      onSelectedItemChange={({ selectedItem }) => onChange(selectedItem.id)}
+      onSelectedItemChange={({ selectedItem }) => onChange(selectedItem)}
     />
   );
 }

@@ -26,7 +26,7 @@ const createWindow = () => {
       backgroundThrottling: false,
     },
   });
-  mainWindow.setAlwaysOnTop(true, 'pop-up-menu', 10);
+  mainWindow.setAlwaysOnTop(true, 'pop-up-menu', 1);
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   mainWindow.setFullScreenable(false);
 

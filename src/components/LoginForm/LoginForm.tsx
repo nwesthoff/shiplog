@@ -10,7 +10,7 @@ export default function LoginForm(): ReactElement {
   const [tokenValue, setTokenValue] = useState('');
 
   async function handleLogin() {
-    login(tokenValue);
+    login(tokenValue, 'vercel');
   }
 
   return (

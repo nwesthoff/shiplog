@@ -61,7 +61,7 @@ export default function DeploymentList(): ReactElement {
   return (
     <>
       <Header>
-        <h1 style={{ marginTop: 0 }}>{teamData?.name || user?.name}</h1>
+        <h1 style={{ marginTop: 0 }}>{teamData?.name || user?.vercel?.name}</h1>
         {dplValidating && <RefreshChip showText={!layoutScrolled} />}
       </Header>
       {flatDpls && flatDpls.length > 0 && (
@@ -70,7 +70,7 @@ export default function DeploymentList(): ReactElement {
             <DeploymentItem
               pageNext={() => setDplPages(dplPages + 1)}
               lastItem={flatDpls.length - 10 === i}
-              team={teamData?.slug || user?.username || ''}
+              team={teamData?.slug || user?.vercel?.username || ''}
               key={deployment.uid}
               {...deployment}
             />

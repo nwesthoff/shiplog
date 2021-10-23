@@ -22,6 +22,10 @@ export const vercelFetcher = async (url: string, options?: RequestInit) => {
     ...options,
   });
 
+  if (res.status !== 200) {
+    return res;
+  }
+
   return res.json();
 };
 

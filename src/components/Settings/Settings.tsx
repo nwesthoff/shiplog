@@ -5,9 +5,9 @@ import styles from './Settings.module.scss';
 import Header from 'components/Header/Header';
 import { localStore } from 'config/localStorage';
 import Toggle from 'components/Inputs/Toggle';
+import ServiceLine from './ServiceLine';
 
 export default function Settings(): ReactElement {
-  const { logout } = useAuth();
   const [startAtLogin, setStartAtLogin] = useState(
     window.localStorage.getItem(localStore.startAtLogin) === 'true'
   );
@@ -55,8 +55,12 @@ export default function Settings(): ReactElement {
           <label htmlFor="startupCheckbox">Open on startup</label>{' '}
           <span style={{ color: 'var(--color-red)' }}>(beta)</span>
         </div>
+
         <div className={styles.settingsLine}>
-          <Button onClick={logout}>Log out</Button>
+          <ServiceLine service="vercel" />
+        </div>
+        <div className={styles.settingsLine}>
+          <ServiceLine service="netlify" />
         </div>
       </div>
     </>

@@ -3,6 +3,7 @@ import { useSelect } from 'downshift';
 import { FiChevronDown } from 'react-icons/fi';
 import styles from './Select.module.scss';
 import { useLocation } from 'react-router';
+import { SiNetlify, SiVercel } from 'react-icons/si';
 
 interface Props {
   items: any[];
@@ -61,6 +62,8 @@ export default function Select({
                   })}
                   className={styles.selectItem}
                 >
+                  {team.service === 'vercel' && <SiVercel />}
+                  {team.service === 'netlify' && <SiNetlify />}
                   {team.name}
                 </li>
               ))}

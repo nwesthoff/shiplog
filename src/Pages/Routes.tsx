@@ -22,11 +22,11 @@ export const Routes = () => {
     return <Redirect to={paths.team} />;
   }
 
-  if (!user && pathname !== paths.login) {
+  if ((!user?.vercel || !user.netlify) && pathname !== paths.login) {
     return <Redirect to={paths.login} />;
   }
 
-  if (user && pathname === paths.login) {
+  if ((user?.vercel || user?.netlify) && pathname === paths.login) {
     return <Redirect to={paths.home} />;
   }
 
@@ -42,13 +42,13 @@ export const Routes = () => {
         <Login />
       </Route>
 
-      <Route path={`${paths.team}/:teamId/:projectId`}>
+      <Route path={`${paths.team}/:service/:teamId/:projectId`}>
         <Layout>
           <Deployments />
         </Layout>
       </Route>
 
-      <Route path={`${paths.team}/:teamId`}>
+      <Route path={`${paths.team}/:service/:teamId`}>
         <Layout>
           <Deployments />
         </Layout>
