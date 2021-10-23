@@ -31,9 +31,7 @@ export class TrayBuilder {
 
     this.mainWindow.setPosition(position.x, position.y, false);
     this.mainWindow.show();
-    this.mainWindow.setVisibleOnAllWorkspaces(true);
     this.mainWindow.focus();
-    this.mainWindow.setVisibleOnAllWorkspaces(false);
   };
 
   toggleWindow = () => {

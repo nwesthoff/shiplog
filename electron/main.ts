@@ -5,6 +5,7 @@ import { launchAtStartup } from './launchAtStartup';
 import { TrayBuilder } from './TrayBuilder';
 
 let mainWindow: BrowserWindow | null = null;
+process.platform === 'darwin' && app.dock.hide();
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -16,6 +17,8 @@ const createWindow = () => {
     fullscreenable: false,
     resizable: false,
     skipTaskbar: true,
+    movable: false,
+    title: 'Shiplog',
     webPreferences: {
       nativeWindowOpen: true,
       devTools: isDev,
@@ -23,6 +26,9 @@ const createWindow = () => {
       backgroundThrottling: false,
     },
   });
+  mainWindow.setAlwaysOnTop(true, 'pop-up-menu', 10);
+  mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  mainWindow.setFullScreenable(false);
 
   mainWindow.loadURL(
     isDev ? 'http://localhost:3000' : `file://${__dirname}/../index.html`
@@ -63,8 +69,6 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-process.platform === 'darwin' && app.dock.hide();
 
 ipcMain.on('buildState', (_e, data) => {
   if (data === 'building') {
