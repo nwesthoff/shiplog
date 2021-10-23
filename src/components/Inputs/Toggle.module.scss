@@ -1,0 +1,27 @@
+.switch {
+  position: relative;
+  display: flex;
+  gap: var(--space-4);
+
+  input {
+    cursor: pointer;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+}
+
+.option {
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-small);
+
+  &:hover {
+    background: var(--color-barely);
+  }
+
+  &.active {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+}

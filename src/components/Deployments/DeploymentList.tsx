@@ -5,9 +5,10 @@ import { useAuth } from 'hooks/useAuth';
 import { ReactElement, useContext } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useEffect } from 'react';
-import { useVercelDeploymentList, useVercelTeam } from 'services/vercel';
+import { useVercelDeploymentList, useVercelTeam, useVercelUser } from 'services/vercel';
 import DeploymentItem from './DeploymentItem';
 import styles from './Deployments.module.scss';
+import { localStore } from 'config/localStorage';
 
 const PAGE_SIZE = 20;
 
@@ -19,6 +20,7 @@ export default function DeploymentList(): ReactElement {
   const params = new URLSearchParams(location.search);
   const proj = params.get('proj');
 
+  const { data: userData } = useVercelUser();
   const { data: teamData } = useVercelTeam({ teamId });
   const { user } = useAuth();
   const {
@@ -36,7 +38,19 @@ export default function DeploymentList(): ReactElement {
   const flatDpls = dplData?.flatMap((map) => map.deployments);
 
   useEffect(() => {
-    const dplState = !!flatDpls?.find((dpl) => dpl.state === 'BUILDING');
+    const notifyAllBuilds = JSON.parse(
+      window.localStorage.getItem(localStore.notifyAllBuilds) || 'true'
+    );
+
+    const dplState = !!flatDpls?.find((dpl) => {
+      if (!notifyAllBuilds && userData) {
+        return (
+          dpl.state === 'BUILDING' && dpl.creator.username === userData.user.username
+        );
+      }
+      return dpl.state === 'BUILDING';
+    });
+
     if (dplState) {
       (window as any).ipc.send('buildState', 'building');
     } else {
