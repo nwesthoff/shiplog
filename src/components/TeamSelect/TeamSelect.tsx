@@ -44,10 +44,6 @@ export default function TeamSelect(): ReactElement {
     }
   }
 
-  useEffect(() => {
-    window.localStorage.removeItem(localStore.lastOpenTeam);
-  }, []);
-
   return (
     <Select
       items={teamsAndUser}

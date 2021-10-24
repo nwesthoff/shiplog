@@ -24,7 +24,7 @@ export default function DeploymentsPage(): ReactElement {
   } = useDeploymentList({
     service,
     teamId,
-    projectId: proj || undefined,
+    projectId: proj,
     limit: PAGE_SIZE,
     swrOptions: { refreshInterval: 10000, refreshWhenHidden: true },
   });

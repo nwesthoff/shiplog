@@ -26,7 +26,12 @@ export const useProjectList = ({
   teamId?.includes('team_') && searchParams.append('teamId', teamId);
   const qs = searchParams.toString();
   const fetcher = service === 'vercel' ? fetchVercelProjects : fetchNetlifyProjects;
-  const url = service === 'vercel' ? `/v8/projects?${qs}` : '/sites';
+  let url: string | null = null;
+  if (service === 'vercel') {
+    url = `/v8/projects?${qs}`;
+  } else if (service === 'netlify') {
+    url = '/sites';
+  }
 
   return useSWR<{ projects: Project[] }>(url, fetcher);
 };

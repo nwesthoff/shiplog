@@ -1,27 +1,18 @@
 import Deployments from './Deployments';
 import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
-import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch, useLocation, useParams } from 'react-router-dom';
 import Login from './Login';
 import Settings from '../components/Settings/Settings';
 import Layout from 'components/Layout/Layout';
 import { localStore } from 'config/localStorage';
+import { Service } from 'types/services';
+import Home from './Home';
 
 export const Routes = () => {
   const { user } = useAuth();
   const location = useLocation();
   const { pathname } = location;
-
-  if (pathname === paths.home) {
-    const lastTeam = localStorage.getItem(localStore.lastOpenTeam);
-
-    if (lastTeam) {
-      const team = JSON.parse(lastTeam);
-      return <Redirect to={`${paths.team}/${team.service}/${team.id}`} />;
-    }
-
-    return <Redirect to={paths.team} />;
-  }
 
   if (!user?.vercel && !user?.netlify && pathname !== paths.login) {
     return <Redirect to={paths.login} />;
@@ -33,6 +24,9 @@ export const Routes = () => {
 
   return (
     <Switch location={location} key={pathname}>
+      <Route path={paths.home} exact>
+        <Home />
+      </Route>
       <Route path={paths.settings} exact>
         <Layout>
           <Settings />
@@ -55,7 +49,7 @@ export const Routes = () => {
         </Layout>
       </Route>
 
-      <Route path={paths.team} exact>
+      <Route path={`${paths.team}/:service`} exact>
         <Layout>
           <Deployments />
         </Layout>

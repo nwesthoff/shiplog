@@ -8,10 +8,17 @@ import { VercelUser } from 'types/vercel';
 
 const authContext = createContext<{
   isAuthenticated: boolean;
+  loading: boolean;
   login: (token: string, service: Service) => void;
   logout: (service?: Service) => void;
   user: { vercel?: VercelUser; netlify?: NetlifyUser } | null;
-}>({ user: null, login: () => {}, logout: () => {}, isAuthenticated: false });
+}>({
+  user: null,
+  login: () => {},
+  logout: () => {},
+  isAuthenticated: false,
+  loading: true,
+});
 
 export function ProvideAuth({ children }) {
   const auth = useProvideAuth();
@@ -27,6 +34,7 @@ function useProvideAuth() {
   const [netlifyUser, setNetlifyUser] = useState<NetlifyUser>();
   const user = { vercel: vercelUser, netlify: netlifyUser };
   const isAuthenticated = !!user.vercel || !!user.netlify;
+  const [loading, setLoading] = useState(true);
 
   const login = async (token: string, service: Service | Service[]) => {
     if (service === 'vercel') {
@@ -73,15 +81,25 @@ function useProvideAuth() {
     }
   };
 
-  useEffect(() => {
+  async function restoreAuth() {
+    setLoading(true);
     const storedVercelToken = window.localStorage.getItem(localStore.vercelToken);
     const storedNetlifyToken = window.localStorage.getItem(localStore.netlifyToken);
 
-    storedVercelToken && login(storedVercelToken, 'vercel');
-    storedNetlifyToken && login(storedNetlifyToken, 'netlify');
+    await Promise.all([
+      storedVercelToken ? login(storedVercelToken, 'vercel') : new Promise(() => {}),
+      storedNetlifyToken ? login(storedNetlifyToken, 'netlify') : new Promise(() => {}),
+    ]);
+
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    restoreAuth();
   }, []);
 
   return {
+    loading,
     login,
     user,
     logout,

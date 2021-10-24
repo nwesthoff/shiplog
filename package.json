@@ -72,7 +72,10 @@
     "forge": {
       "packagerConfig": {
         "name": "Shiplog",
-        "icon": "icons/icon.icns"
+        "icon": "icons/icon.icns",
+        "osxSign": {
+          "identity": "Apple Development: nils@nilswesthoff.com (4TUL43JS5F)"
+        }
       },
       "makers": [
         {

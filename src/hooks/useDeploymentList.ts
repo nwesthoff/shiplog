@@ -2,6 +2,7 @@ import { netlifyFetcher } from 'services/netlify';
 import { vercelFetcher } from 'services/vercel';
 import { PublicConfiguration } from 'swr/dist/types';
 import useSWRInfinite from 'swr/infinite';
+import { KeyLoader } from 'swr';
 import { NetlifyDeployment } from 'types/netlify';
 import { Deployment, Service } from 'types/services';
 import { VercelDeployment } from 'types/vercel';
@@ -94,12 +95,12 @@ export const useDeploymentList = ({
 }: {
   service: Service;
   teamId?: string;
-  projectId?: string;
+  projectId: string | null;
   limit?: number;
   swrOptions?: Partial<PublicConfiguration>;
 }) => {
   const searchParams = new URLSearchParams();
-  const urlParams: { siteId?: string } = {};
+  const urlParams: { siteId?: string | null } = {};
   if (service === 'vercel') {
     teamId?.includes('team_') && searchParams.append('teamId', teamId);
     projectId && searchParams.append('projectId', projectId);
@@ -110,10 +111,13 @@ export const useDeploymentList = ({
   }
   const qs = searchParams.toString();
   const fetcher = service === 'vercel' ? vercelFetchDeploys : netlifyFetchDeploys;
-  const getPage =
-    service === 'vercel'
-      ? (page: number, prevData: any) => getVercelKey(page, prevData, qs)
-      : (page: number, prevData: any) => getNetlifyKey(page, prevData, { qs, urlParams });
+  let getPage: KeyLoader = null;
+  if (service === 'vercel') {
+    getPage = (page: number, prevData: any) => getVercelKey(page, prevData, qs);
+  } else if (projectId && service === 'netlify') {
+    getPage = (page: number, prevData: any) =>
+      getNetlifyKey(page, prevData, { qs, urlParams });
+  }
 
   return useSWRInfinite<{ deployments: Deployment[] }>(getPage, fetcher, swrOptions);
 };
