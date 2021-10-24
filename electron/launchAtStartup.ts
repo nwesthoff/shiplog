@@ -1,5 +1,5 @@
 import { App, BrowserWindow } from 'electron';
-import path = require('path');
+import * as path from 'path';
 import { localStore } from '../src/config/localStorage';
 
 export function launchAtStartup(app: App, mainWindow: BrowserWindow) {

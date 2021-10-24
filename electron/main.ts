@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import * as isDev from 'electron-is-dev';
-import path = require('path');
+import * as path from 'path';
 import { launchAtStartup } from './launchAtStartup';
 import { TrayBuilder } from './TrayBuilder';
 
@@ -26,7 +26,7 @@ const createWindow = () => {
       backgroundThrottling: false,
     },
   });
-  mainWindow.setAlwaysOnTop(true, 'floating');
+  mainWindow.setAlwaysOnTop(true, 'floating', 1);
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   mainWindow.setFullScreenable(false);
 

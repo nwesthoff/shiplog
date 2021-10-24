@@ -5,7 +5,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useVercelTeamList } from 'services/vercel';
 import { localStore } from 'config/localStorage';
 import Select from 'components/Select/Select';
-import { VercelTeam, VercelUser } from 'types/vercel';
 import { Service } from 'types/services';
 
 export default function TeamSelect(): ReactElement {
@@ -44,6 +43,10 @@ export default function TeamSelect(): ReactElement {
       history.push(`${paths.team}/${team.service}/${team.id}`);
     }
   }
+
+  useEffect(() => {
+    window.localStorage.removeItem(localStore.lastOpenTeam);
+  }, []);
 
   return (
     <Select
