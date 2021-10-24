@@ -76,16 +76,18 @@ export default function DeploymentItem({
     <li ref={itemRef} className={styles.dplLine} key={props.id + created}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <h3 className={styles.commitMessage}>{props.meta.ghCommitMessage}</h3>
-        <div className={styles.commitRef}>
-          <FiGitBranch style={{ color: 'var(--color-muted)' }} />
-          <a
-            target="blank"
-            href={`https://github.com/${props.meta.ghOrg}/${props.meta.ghRepo}/commit/${props.meta.ghCommitSha}`}
-            className={styles.dplId}
-          >
-            <h5 className={styles.dplCommitRefText}>{props.meta.ghCommitRef}</h5>
-          </a>
-        </div>
+        {props.meta.ghCommitRef && (
+          <div className={styles.commitRef}>
+            <FiGitBranch style={{ color: 'var(--color-muted)' }} />
+            <a
+              target="blank"
+              href={`https://github.com/${props.meta.ghOrg}/${props.meta.ghRepo}/commit/${props.meta.ghCommitSha}`}
+              className={styles.dplId}
+            >
+              <h5 className={styles.dplCommitRefText}>{props.meta.ghCommitRef}</h5>
+            </a>
+          </div>
+        )}
         <h3 className={styles.projectProps}>
           <span className={styles.projectName}>{props.name}</span>{' '}
           {shortFormatDistance(formatDistanceStrict(created, new Date()))} ago by{' '}
