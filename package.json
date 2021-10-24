@@ -72,10 +72,7 @@
     "forge": {
       "packagerConfig": {
         "name": "Shiplog",
-        "icon": "icons/icon.icns",
-        "osxSign": {
-          "identity": "Apple Development: Zeno Kapitein (Zeno Kapitein)"
-        }
+        "icon": "icons/icon.icns"
       },
       "makers": [
         {
