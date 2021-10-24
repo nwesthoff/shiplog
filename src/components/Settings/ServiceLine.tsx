@@ -31,7 +31,9 @@ export default function ServiceLine({ service }: Props): ReactElement {
             value={token}
             type="password"
           />
-          <Button type="submit">Log in</Button>
+          <Button type="submit" onClick={() => login(token, service)}>
+            Log in
+          </Button>
         </form>
       )}
     </>

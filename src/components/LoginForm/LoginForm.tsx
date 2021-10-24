@@ -63,7 +63,9 @@ export default function LoginForm(): ReactElement {
                       type="password"
                       onChange={(e) => setTokenValue(e.target.value)}
                     />
-                    <Button type="submit">Login</Button>
+                    <Button type="submit" onClick={handleLogin}>
+                      Login
+                    </Button>
                   </div>
                 </div>
               </form>
