@@ -1,6 +1,4 @@
 import { ReactElement, useState } from 'react';
-import Button from 'components/Button/Button';
-import { useAuth } from 'hooks/useAuth';
 import styles from './Settings.module.scss';
 import Header from 'components/Header/Header';
 import { localStore } from 'config/localStorage';

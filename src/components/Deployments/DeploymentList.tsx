@@ -1,48 +1,41 @@
 import Header from 'components/Header/Header';
 import { ScrollProvider } from 'components/Layout/Layout';
 import RefreshChip from 'components/RefreshChip/RefreshChip';
-import { useAuth } from 'hooks/useAuth';
 import { ReactElement, useContext } from 'react';
-import { useLocation, useParams } from 'react-router';
 import { useEffect } from 'react';
-import { useVercelDeploymentList, useVercelTeam, useVercelUser } from 'services/vercel';
+import { useVercelUser } from 'services/vercel';
 import DeploymentItem from './DeploymentItem';
 import styles from './Deployments.module.scss';
 import { localStore } from 'config/localStorage';
+import { Deployment, Service } from 'types/services';
+import { useParams } from 'react-router';
+import { SiNetlify, SiVercel } from 'react-icons/si';
 
-const PAGE_SIZE = 20;
+interface Props {
+  dpls: Deployment[];
+  dplValidating: boolean;
+  dplPages: number;
+  setDplPages: (pages: number) => void;
+  teamName: string;
+}
 
-export default function DeploymentList(): ReactElement {
+export default function DeploymentList({
+  dpls,
+  dplValidating,
+  dplPages,
+  setDplPages,
+  teamName,
+}: Props): ReactElement {
+  const { service } = useParams<{ service: Service }>();
   const { layoutScrolled } = useContext(ScrollProvider);
-
-  const { teamId } = useParams<{ teamId: string }>();
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const proj = params.get('proj');
-
   const { data: userData } = useVercelUser();
-  const { data: teamData } = useVercelTeam({ teamId });
-  const { user } = useAuth();
-  const {
-    data: dplData,
-    isValidating: dplValidating,
-    size: dplPages,
-    setSize: setDplPages,
-  } = useVercelDeploymentList({
-    teamId,
-    projectId: proj || undefined,
-    limit: PAGE_SIZE,
-    swrOptions: { refreshInterval: 10000, refreshWhenHidden: true },
-  });
-
-  const flatDpls = dplData?.flatMap((map) => map.deployments);
 
   useEffect(() => {
     const notifyAllBuilds = JSON.parse(
       window.localStorage.getItem(localStore.notifyAllBuilds) || 'true'
     );
 
-    const dplState = !!flatDpls?.find((dpl) => {
+    const dplState = !!dpls?.find((dpl) => {
       if (!notifyAllBuilds && userData) {
         return (
           dpl.state === 'BUILDING' && dpl.creator.username === userData.user.username
@@ -56,22 +49,32 @@ export default function DeploymentList(): ReactElement {
     } else {
       (window as any).ipc.send('buildState', 'ready');
     }
-  }, [dplData]);
+  }, [dpls]);
 
   return (
     <>
       <Header>
-        <h1 style={{ marginTop: 0 }}>{teamData?.name || user?.vercel?.name}</h1>
+        <h1
+          style={{
+            marginTop: 0,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-8)',
+          }}
+        >
+          {service === 'vercel' && <SiVercel />} {service === 'netlify' && <SiNetlify />}{' '}
+          {teamName}
+        </h1>
         {dplValidating && <RefreshChip showText={!layoutScrolled} />}
       </Header>
-      {flatDpls && flatDpls.length > 0 && (
+      {dpls.length > 0 && (
         <ul className={styles.dplList}>
-          {flatDpls.map((deployment, i) => (
+          {dpls.map((deployment, i) => (
             <DeploymentItem
               pageNext={() => setDplPages(dplPages + 1)}
-              lastItem={flatDpls.length - 10 === i}
-              team={teamData?.slug || user?.vercel?.username || ''}
-              key={deployment.uid}
+              lastItem={dpls.length - 10 === i}
+              team={teamName}
+              key={deployment.id}
               {...deployment}
             />
           ))}

@@ -1,10 +1,11 @@
 import { ReactElement, useEffect, useState, useRef } from 'react';
-import { VercelDeployment } from 'types/vercel';
 import styles from './Deployments.module.scss';
 import { FiArrowUpRight, FiGitBranch } from 'react-icons/fi';
 import { formatDistanceStrict, intervalToDuration } from 'date-fns';
 import { shortFormatDistance } from 'utils/helpers/shortFormatDistance';
 import AnchorButton from 'components/Button/AnchorButton';
+import { Deployment, Service } from 'types/services';
+import { useParams } from 'react-router';
 
 const stateColorMap = {
   READY: 'var(--color-cyan)',
@@ -24,13 +25,14 @@ export default function DeploymentItem({
   team,
   created,
   state,
-  ready,
-  buildingAt,
+  buildEnd,
+  buildStart,
   lastItem,
   pageNext,
   ...props
-}: VercelDeployment & Props): ReactElement {
+}: Deployment & Props): ReactElement {
   const itemRef = useRef<HTMLLIElement>(null);
+  const { service } = useParams<{ service: Service }>();
 
   useEffect(() => {
     if (lastItem && itemRef && pageNext) {
@@ -49,8 +51,8 @@ export default function DeploymentItem({
   }, [itemRef, lastItem]);
 
   const interval = intervalToDuration({
-    start: buildingAt || new Date(),
-    end: state === 'READY' ? ready : new Date(),
+    start: buildStart || new Date(),
+    end: state === 'READY' ? buildEnd : new Date(),
   });
 
   const [buildTime, setBuildTime] = useState(`${interval.minutes}m ${interval.seconds}s`);
@@ -58,8 +60,8 @@ export default function DeploymentItem({
   useEffect(() => {
     const timeSinceInterval = setInterval(() => {
       const interval = intervalToDuration({
-        start: buildingAt || new Date(),
-        end: state === 'READY' ? ready : new Date(),
+        start: buildStart || new Date(),
+        end: state === 'READY' ? buildEnd : new Date(),
       });
 
       setBuildTime(`${interval.minutes}m ${interval.seconds}s`);
@@ -68,20 +70,20 @@ export default function DeploymentItem({
     return () => {
       clearInterval(timeSinceInterval);
     };
-  }, [buildingAt, ready, state]);
+  }, [buildStart, buildEnd, state]);
 
   return (
-    <li ref={itemRef} className={styles.dplLine} key={props.uid}>
+    <li ref={itemRef} className={styles.dplLine} key={props.id + created}>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <h3 className={styles.commitMessage}>{props.meta.githubCommitMessage}</h3>
+        <h3 className={styles.commitMessage}>{props.meta.ghCommitMessage}</h3>
         <div className={styles.commitRef}>
           <FiGitBranch style={{ color: 'var(--color-muted)' }} />
           <a
             target="blank"
-            href={`https://github.com/${props.meta.githubOrg}/${props.meta.githubRepo}/commit/${props.meta.githubCommitSha}`}
+            href={`https://github.com/${props.meta.ghOrg}/${props.meta.ghRepo}/commit/${props.meta.ghCommitSha}`}
             className={styles.dplId}
           >
-            <h5 className={styles.dplCommitRefText}>{props.meta.githubCommitRef}</h5>
+            <h5 className={styles.dplCommitRefText}>{props.meta.ghCommitRef}</h5>
           </a>
         </div>
         <h3 className={styles.projectProps}>
@@ -101,23 +103,30 @@ export default function DeploymentItem({
             />
             <p>{state.toLowerCase()}</p>
           </div>
-          {(state === 'READY' || state === 'BUILDING') && buildingAt && (
+          {(state === 'READY' || state === 'BUILDING') && buildStart && (
             <div className={styles.buildTime}>{buildTime}</div>
           )}
         </div>
         <div style={{ display: 'flex', gap: 'var(--space-8)' }}>
           {state === 'READY' ? (
             <>
-              <AnchorButton target="blank" href={'https://' + props.url}>
+              <AnchorButton
+                target="blank"
+                href={service === 'vercel' ? 'https://' + props.url : props.url}
+              >
                 Visit
               </AnchorButton>
               <AnchorButton
                 variant="outlined"
                 target="blank"
-                href={`https://vercel.com/${team}/${props.name}/${props.uid.replace(
-                  'dpl_',
-                  ''
-                )}`}
+                href={
+                  service === 'vercel'
+                    ? `https://vercel.com/${team}/${props.name}/${props.id.replace(
+                        'dpl_',
+                        ''
+                      )}`
+                    : props.admin_url
+                }
               >
                 <FiArrowUpRight />
               </AnchorButton>
@@ -126,7 +135,7 @@ export default function DeploymentItem({
             <AnchorButton
               variant="outlined"
               target="blank"
-              href={`https://vercel.com/${team}/${props.name}/${props.uid.replace(
+              href={`https://vercel.com/${team}/${props.name}/${props.id.replace(
                 'dpl_',
                 ''
               )}`}

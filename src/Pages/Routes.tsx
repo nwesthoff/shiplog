@@ -13,16 +13,17 @@ export const Routes = () => {
   const { pathname } = location;
 
   if (pathname === paths.home) {
-    const lastTeamId = localStorage.getItem(localStore.lastOpenTeamId);
+    const lastTeam = localStorage.getItem(localStore.lastOpenTeam);
 
-    if (lastTeamId) {
-      return <Redirect to={`${paths.team}/${lastTeamId}`} />;
+    if (lastTeam) {
+      const team = JSON.parse(lastTeam);
+      return <Redirect to={`${paths.team}/${team.service}/${team.id}`} />;
     }
 
     return <Redirect to={paths.team} />;
   }
 
-  if ((!user?.vercel || !user.netlify) && pathname !== paths.login) {
+  if (!user?.vercel && !user?.netlify && pathname !== paths.login) {
     return <Redirect to={paths.login} />;
   }
 

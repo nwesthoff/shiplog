@@ -23,7 +23,9 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
-  const [user, setUser] = useState<{ vercel?: VercelUser; netlify?: NetlifyUser }>({});
+  const [vercelUser, setVercelUser] = useState<VercelUser>();
+  const [netlifyUser, setNetlifyUser] = useState<NetlifyUser>();
+  const user = { vercel: vercelUser, netlify: netlifyUser };
   const isAuthenticated = !!user.vercel || !!user.netlify;
 
   const login = async (token: string, service: Service | Service[]) => {
@@ -36,9 +38,7 @@ function useProvideAuth() {
 
       if (!res.error) {
         window.localStorage.setItem(localStore.vercelToken, token);
-        const newUser = { ...user, vercel: res.user };
-        setUser(newUser);
-        return newUser;
+        setVercelUser(res.user);
       } else if (res.error.code === 'forbidden') {
         logout('vercel');
       }
@@ -51,9 +51,7 @@ function useProvideAuth() {
 
       if (!res.error && res[0]) {
         window.localStorage.setItem(localStore.netlifyToken, token);
-        const newUser = { ...user, netlify: res[0] };
-        setUser(newUser);
-        return newUser;
+        setNetlifyUser(res[0]);
       } else if (res.status === 401) {
         logout('netlify');
       }
@@ -66,30 +64,21 @@ function useProvideAuth() {
     if (!service) {
       window.localStorage.removeItem(localStore.netlifyToken);
       window.localStorage.removeItem(localStore.vercelToken);
-      setUser({});
+      setVercelUser(undefined);
+      setNetlifyUser(undefined);
     } else {
       window.localStorage.removeItem(localStore[`${service}Token`]);
-      const newUser = user;
-      delete newUser?.[service];
-      setUser(newUser);
+      service === 'vercel' && setVercelUser(undefined);
+      service === 'netlify' && setNetlifyUser(undefined);
     }
   };
 
-  async function restoreUsers() {
+  useEffect(() => {
     const storedVercelToken = window.localStorage.getItem(localStore.vercelToken);
     const storedNetlifyToken = window.localStorage.getItem(localStore.netlifyToken);
 
-    const vercelUser = storedVercelToken
-      ? await login(storedVercelToken, 'vercel')
-      : undefined;
-    const netlifyUser = storedNetlifyToken
-      ? await login(storedNetlifyToken, 'netlify')
-      : undefined;
-    setUser({ vercel: vercelUser?.vercel, netlify: netlifyUser?.netlify });
-  }
-
-  useEffect(() => {
-    restoreUsers();
+    storedVercelToken && login(storedVercelToken, 'vercel');
+    storedNetlifyToken && login(storedNetlifyToken, 'netlify');
   }, []);
 
   return {

@@ -1,7 +1,7 @@
 export const localStore = {
   vercelToken: 'vercelToken',
   netlifyToken: 'netlifyToken',
-  lastOpenTeamId: 'lastTeam',
+  lastOpenTeam: 'lastTeam',
   startAtLogin: 'startAtLogin',
   notifyAllBuilds: 'notifyAllBuilds',
 };

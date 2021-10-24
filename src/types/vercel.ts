@@ -185,7 +185,7 @@ export type VercelBuild = {
   };
   public: false;
   ready: number;
-  readyState: string;
+  readyState: ReadyState;
   regions: [string];
   source: string;
   status: string;

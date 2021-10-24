@@ -1,6 +1,6 @@
 import { config } from 'config/constants';
 
-export const netlifyFetcher = async (url: string, options?: RequestInit) => {
+export async function netlifyFetcher<T = any>(url: string, options?: RequestInit) {
   const token = window.localStorage.getItem('netlifyToken');
 
   const res = await fetch(config.NETLIFY_API_BASE + url, {
@@ -12,9 +12,15 @@ export const netlifyFetcher = async (url: string, options?: RequestInit) => {
     ...options,
   });
 
-  if (res.status !== 200) {
-    return res;
+  if (!res.ok) {
+    const error = {
+      message: 'An error occurred while fetching the data.',
+      info: await res.json(),
+      status: res.status,
+    };
+    // Attach extra info to the error object.
+    throw error;
   }
 
-  return res.json();
-};
+  return res.json() as Promise<T>;
+}

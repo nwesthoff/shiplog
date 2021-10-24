@@ -1,4 +1,4 @@
-export type ReadyState = string;
+export type NetlifyReadyState = 'ready' | 'error';
 
 export type NetlifyUser = {
   email: string;
@@ -23,4 +23,26 @@ export type NetlifyUser = {
   slug: string;
   tracking_id: string;
   uid?: string;
+};
+
+export type NetlifyDeployment = {
+  id: string;
+  premium: false;
+  claimed: true;
+  name: string;
+  custom_domain: string;
+  url: string;
+  title: string;
+  deploy_time: number;
+  committer?: string;
+  commit_ref?: string;
+  commit_url?: string;
+  deploy_url: string;
+  admin_url: string;
+  screenshot_url: null;
+  created_at: string;
+  published_at: string;
+  updated_at: string;
+  user_id: string;
+  state: NetlifyReadyState;
 };
