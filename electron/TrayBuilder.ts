@@ -1,5 +1,6 @@
 import { BrowserWindow, Menu, Tray } from 'electron';
 import * as path from 'path';
+import * as positioner from 'electron-traywindow-positioner';
 
 export class TrayBuilder {
   tray: Tray | null;
@@ -10,26 +11,15 @@ export class TrayBuilder {
     this.mainWindow = mainWindow;
   }
 
-  getWindowPosition = () => {
+  showWindow = () => {
     if (this.mainWindow == null || this.tray == null) {
       return;
     }
 
-    const windowBounds = this.mainWindow.getBounds();
-    const { x, y, width, height } = this.tray.getBounds();
-    const posX = Math.round(x + width / 2 - windowBounds.width / 2);
-    const posY = Math.round(y + height);
+    const trayBounds = this.tray.getBounds();
+    const alignment = { x: 'center', y: 'down' };
+    positioner.position(this.mainWindow, trayBounds, alignment);
 
-    return { x: posX, y: posY };
-  };
-
-  showWindow = () => {
-    const position = this.getWindowPosition();
-    if (this.mainWindow == null || position == null) {
-      return;
-    }
-
-    this.mainWindow.setPosition(position.x, position.y, false);
     this.mainWindow.show();
     this.mainWindow.focus();
   };
