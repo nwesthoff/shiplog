@@ -1,5 +1,11 @@
 {
   "name": "shiplog",
+  "author": {
+    "name": "Nils Westhoff",
+    "email": "nils@nilswesthoff.com",
+    "url": "https://nilswesthoff.com"
+  },
+  "description": "A cross-platform Menu Bar application for watching your Vercel and Netlify builds.",
   "version": "1.0.0",
   "private": true,
   "main": "build/electron/main.js",
@@ -71,6 +77,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
+        "asar": true,
         "name": "Shiplog",
         "icon": "icons/icon.icns",
         "osxSign": {
