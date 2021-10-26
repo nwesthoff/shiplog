@@ -1,5 +1,11 @@
 {
   "name": "shiplog",
+  "author": {
+    "name": "Nils Westhoff",
+    "email": "nils@nilswesthoff.com",
+    "url": "https://nilswesthoff.com"
+  },
+  "description": "A cross-platform Menu Bar application for watching your Vercel and Netlify builds.",
   "version": "1.0.0",
   "private": true,
   "main": "build/electron/main.js",
@@ -35,6 +41,7 @@
     ]
   },
   "dependencies": {
+    "electron-traywindow-positioner": "^1.1.0",
     "electron-is-dev": "^2.0.0"
   },
   "devDependencies": {
@@ -57,6 +64,7 @@
     "date-fns": "^2.24.0",
     "downshift": "^6.1.7",
     "electron": "^15.0.0",
+    "electron-traywindow-positioner": "^1.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
@@ -71,6 +79,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
+        "asar": true,
         "name": "Shiplog",
         "icon": "icons/icon.icns",
         "osxSign": {
