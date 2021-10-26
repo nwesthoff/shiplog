@@ -119,3 +119,37 @@ button {
   background: none;
   cursor: pointer;
 }
+
+body,
+html,
+* {
+  /* Customize scrollbar */
+
+  /* total width */
+  ::-webkit-scrollbar {
+    background-color: transparent;
+    width: 8px;
+  }
+
+  /* background of the scrollbar except button or resizer */
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  /* scrollbar itself */
+  ::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #30303140;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    ::-webkit-scrollbar-thumb {
+      background-color: #babac040;
+    }
+  }
+
+  /* set button(top and bottom of the scrollbar) */
+  ::-webkit-scrollbar-button {
+    display: none;
+  }
+}
