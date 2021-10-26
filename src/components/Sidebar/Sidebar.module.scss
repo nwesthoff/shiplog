@@ -13,6 +13,10 @@
   width: var(--space-192);
   justify-content: space-between;
   max-height: 100%;
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #babac040;
+  }
 }
 
 .innerSidebar {

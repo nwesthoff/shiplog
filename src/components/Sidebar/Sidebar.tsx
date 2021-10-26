@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import TeamSelect from 'components/TeamSelect/TeamSelect';
-import styles from './Sidebar.module.css';
+import styles from './Sidebar.module.scss';
 import { paths } from 'config/paths';
 import { FiSettings } from 'react-icons/fi';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
