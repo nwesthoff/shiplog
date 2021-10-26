@@ -4,6 +4,7 @@ import Header from 'components/Header/Header';
 import { localStore } from 'config/localStorage';
 import Toggle from 'components/Inputs/Toggle';
 import ServiceLine from './ServiceLine';
+import { SiNetlify, SiVercel } from 'react-icons/si';
 
 export default function Settings(): ReactElement {
   const [startAtLogin, setStartAtLogin] = useState(
@@ -55,10 +56,12 @@ export default function Settings(): ReactElement {
         </div>
 
         <div className={styles.settingsLine}>
-          <ServiceLine service="vercel" />
-        </div>
-        <div className={styles.settingsLine}>
-          <ServiceLine service="netlify" />
+          <div className={styles.settingsServiceLine}>
+            <ServiceLine icon={SiVercel} service="vercel" />
+          </div>
+          <div className={styles.settingsServiceLine}>
+            <ServiceLine icon={SiNetlify} service="netlify" />
+          </div>
         </div>
       </div>
     </>

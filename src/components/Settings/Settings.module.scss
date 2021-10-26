@@ -9,6 +9,7 @@
 
 .settingsLine {
   display: flex;
+  flex-flow: row wrap;
   width: 100%;
   gap: var(--space-4);
   align-items: center;
@@ -17,6 +18,13 @@
   &:not(:last-of-type) {
     border-bottom: 1px solid var(--color-barely);
   }
+}
+
+.settingsServiceLine {
+  width: 100%;
+  display: flex;
+  gap: var(--space-16);
+  align-items: center;
 }
 
 .tokenInput {

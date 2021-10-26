@@ -2,22 +2,28 @@ import Button from 'components/Button/Button';
 import { useAuth } from 'hooks/useAuth';
 import { ReactElement } from 'react';
 import { useState } from 'react';
+import { IconType } from 'react-icons/lib';
 import { Service } from 'types/services';
 import styles from './Settings.module.scss';
 
 interface Props {
   service: Service;
+  icon?: IconType;
 }
 
-export default function ServiceLine({ service }: Props): ReactElement {
+export default function ServiceLine({ service, icon: Icon }: Props): ReactElement {
   const { logout, user, login } = useAuth();
   const [token, setToken] = useState<string>('');
 
   return (
     <>
-      <h4 style={{ textTransform: 'capitalize' }}>Service: {service}</h4>
+      <h4 style={{ textTransform: 'capitalize' }}>
+        {Icon && <Icon opacity={0.8} />} {service}
+      </h4>
       {user?.[service] ? (
-        <Button onClick={() => logout(service)}>Log out</Button>
+        <Button variant="outlined" onClick={() => logout(service)}>
+          Log out
+        </Button>
       ) : (
         <form
           style={{ display: 'flex', gap: 'var(--space-4)' }}

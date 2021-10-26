@@ -83,13 +83,13 @@ function useProvideAuth() {
 
   async function restoreAuth() {
     setLoading(true);
+    const promises: Promise<void>[] = [];
     const storedVercelToken = window.localStorage.getItem(localStore.vercelToken);
     const storedNetlifyToken = window.localStorage.getItem(localStore.netlifyToken);
 
-    await Promise.all([
-      storedVercelToken ? login(storedVercelToken, 'vercel') : new Promise(() => {}),
-      storedNetlifyToken ? login(storedNetlifyToken, 'netlify') : new Promise(() => {}),
-    ]);
+    storedVercelToken && promises.push(login(storedVercelToken, 'vercel'));
+    storedNetlifyToken && promises.push(login(storedNetlifyToken, 'netlify'));
+    await Promise.all(promises);
 
     setLoading(false);
   }
