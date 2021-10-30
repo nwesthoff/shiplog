@@ -1,12 +1,10 @@
 import Deployments from './Deployments';
 import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
-import { Redirect, Route, Switch, useLocation, useParams } from 'react-router-dom';
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import Login from './Login';
 import Settings from '../components/Settings/Settings';
 import Layout from 'components/Layout/Layout';
-import { localStore } from 'config/localStorage';
-import { Service } from 'types/services';
 import Home from './Home';
 
 export const Routes = () => {
