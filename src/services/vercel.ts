@@ -37,13 +37,16 @@ export async function vercelFetcher<T = any>(url: string, options?: RequestInit)
 
 type TeamRequestProps = { teamId?: string };
 
-export const useVercelTeam = ({ teamId }: TeamRequestProps = {}) => {
+export const useVercelTeam = ({ teamId }: TeamRequestProps) => {
   const id = teamId?.includes('team_') ? teamId : '';
   return useSWR<VercelTeam>(teamId ? `/v1/teams/${id}` : null, vercelFetcher);
 };
 
 export const useVercelTeamList = () =>
-  useSWR<{ teams: VercelTeam[] }>('/v1/teams', vercelFetcher);
+  useSWR<{ teams: VercelTeam[] }>(
+    window.localStorage.getItem('vercelToken') && '/v1/teams',
+    vercelFetcher
+  );
 
 export const useVercelUser = () =>
   useSWR<{ user: VercelUser }>('/www/user', vercelFetcher);

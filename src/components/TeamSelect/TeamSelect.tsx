@@ -44,6 +44,10 @@ export default function TeamSelect(): ReactElement {
     }
   }
 
+  if (!teamsAndUser || teamsAndUser.length <= 1) {
+    return <></>;
+  }
+
   return (
     <Select
       items={teamsAndUser}

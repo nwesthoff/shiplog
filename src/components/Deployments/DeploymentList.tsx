@@ -10,6 +10,7 @@ import { localStore } from 'config/localStorage';
 import { Deployment, Service } from 'types/services';
 import { useParams } from 'react-router';
 import { SiNetlify, SiVercel } from 'react-icons/si';
+import { useAuth } from 'hooks/useAuth';
 
 interface Props {
   dpls: Deployment[];
@@ -28,7 +29,7 @@ export default function DeploymentList({
 }: Props): ReactElement {
   const { service } = useParams<{ service: Service }>();
   const { layoutScrolled } = useContext(ScrollProvider);
-  const { data: userData } = useVercelUser();
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     const notifyAllBuilds = JSON.parse(
@@ -36,9 +37,10 @@ export default function DeploymentList({
     );
 
     const dplState = !!dpls?.find((dpl) => {
-      if (!notifyAllBuilds && userData) {
+      if (!notifyAllBuilds && isAuthenticated) {
+        console.log(dpl.creator);
         return (
-          dpl.state === 'BUILDING' && dpl.creator.username === userData.user.username
+          dpl.state === 'BUILDING' && dpl.creator.username === user?.vercel?.username
         );
       }
       return dpl.state === 'BUILDING';
@@ -62,8 +64,8 @@ export default function DeploymentList({
             gap: 'var(--space-8)',
           }}
         >
-          {service === 'vercel' && <SiVercel />} {service === 'netlify' && <SiNetlify />}{' '}
-          {teamName}
+          {service === 'vercel' && <SiVercel />}
+          {service === 'netlify' && <SiNetlify />} {teamName}
         </h1>
         {dplValidating && <RefreshChip showText={!layoutScrolled} />}
       </Header>

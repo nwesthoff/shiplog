@@ -5,6 +5,7 @@ import { useAuth } from 'hooks/useAuth';
 import { useLocation, useParams } from 'react-router';
 import { useDeploymentList } from 'hooks/useDeploymentList';
 import { Service } from 'types/services';
+import { useProjectList } from 'hooks/useProjectList';
 
 const PAGE_SIZE = 20;
 
@@ -14,8 +15,11 @@ export default function DeploymentsPage(): ReactElement {
   const params = new URLSearchParams(location.search);
   const proj = params.get('proj');
 
-  const { data: teamData } = useVercelTeam({ teamId });
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const { data: teamData } = useVercelTeam({
+    teamId: isAuthenticated && user?.vercel ? teamId : undefined,
+  });
+
   const {
     data: dplData,
     isValidating: dplValidating,
@@ -36,7 +40,11 @@ export default function DeploymentsPage(): ReactElement {
   } else {
     return (
       <DeploymentList
-        teamName={teamData?.name || user?.vercel?.username || ''}
+        teamName={
+          service === 'vercel'
+            ? teamData?.name || user?.vercel?.username || ''
+            : user?.netlify?.full_name || ''
+        }
         dpls={flatDpls}
         dplValidating={dplValidating}
         dplPages={dplPages}
