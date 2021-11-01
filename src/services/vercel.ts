@@ -23,8 +23,13 @@ export async function vercelFetcher<T = any>(url: string, options?: RequestInit)
   });
 
   if (!res.ok) {
+    const message =
+      res.status === 403
+        ? 'Not authorized or invalid token.'
+        : 'An error occured while fetching the data.';
+
     const error = {
-      message: 'An error occurred while fetching the data.',
+      message,
       info: await res.json(),
       status: res.status,
     };

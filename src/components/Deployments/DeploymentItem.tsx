@@ -55,6 +55,12 @@ export default function DeploymentItem({
     end: state === 'READY' ? buildEnd : new Date(),
   });
 
+  const adminUrl = () => {
+    return service === 'vercel'
+      ? `https://vercel.com/${team}/${props.name}/${props.id.replace('dpl_', '')}`
+      : props.admin_url;
+  };
+
   const [buildTime, setBuildTime] = useState(`${interval.minutes}m ${interval.seconds}s`);
 
   useEffect(() => {
@@ -81,7 +87,7 @@ export default function DeploymentItem({
             <FiGitBranch style={{ color: 'var(--color-muted)' }} />
             <a
               target="blank"
-              href={`https://github.com/${props.meta.ghOrg}/${props.meta.ghRepo}/commit/${props.meta.ghCommitSha}`}
+              href={`https://github.com/${props.meta.ghOrg}/${props.meta.ghRepo}/commit/${props.meta.ghCommitRef}`}
               className={styles.dplId}
             >
               <h5 className={styles.dplCommitRefText}>{props.meta.ghCommitRef}</h5>
@@ -91,7 +97,7 @@ export default function DeploymentItem({
         <h3 className={styles.projectProps}>
           <span className={styles.projectName}>{props.name}</span>{' '}
           {shortFormatDistance(formatDistanceStrict(created, new Date()))} ago by{' '}
-          {props.creator.username}
+          {props.meta.ghUsername}
         </h3>
       </div>
       <div className={styles.dplSidebar}>
@@ -118,30 +124,12 @@ export default function DeploymentItem({
               >
                 Visit
               </AnchorButton>
-              <AnchorButton
-                variant="outlined"
-                target="blank"
-                href={
-                  service === 'vercel'
-                    ? `https://vercel.com/${team}/${props.name}/${props.id.replace(
-                        'dpl_',
-                        ''
-                      )}`
-                    : props.admin_url
-                }
-              >
+              <AnchorButton variant="outlined" target="blank" href={adminUrl()}>
                 <FiArrowUpRight />
               </AnchorButton>
             </>
           ) : (
-            <AnchorButton
-              variant="outlined"
-              target="blank"
-              href={`https://vercel.com/${team}/${props.name}/${props.id.replace(
-                'dpl_',
-                ''
-              )}`}
-            >
+            <AnchorButton variant="outlined" target="blank" href={adminUrl()}>
               Details
               <FiArrowUpRight />
             </AnchorButton>

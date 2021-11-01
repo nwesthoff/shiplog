@@ -1,15 +1,15 @@
 import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
-import { ReactElement, useEffect } from 'react';
+import { ReactElement } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useVercelTeamList } from 'services/vercel';
 import { localStore } from 'config/localStorage';
 import Select from 'components/Select/Select';
 import { Service } from 'types/services';
+import { useTeamList } from 'hooks/useTeamList';
 
 export default function TeamSelect(): ReactElement {
   const { user } = useAuth();
-  const { data: teamData } = useVercelTeamList();
+  const { data: teamData } = useTeamList({ service: 'vercel' });
   const history = useHistory();
   const location = useLocation();
   const teamsAndUser: { id: string; name: string; service: Service }[] = [];

@@ -56,12 +56,8 @@ export default function Settings(): ReactElement {
         </div>
 
         <div className={styles.settingsLine}>
-          <div className={styles.settingsServiceLine}>
-            <ServiceLine icon={SiVercel} service="vercel" />
-          </div>
-          <div className={styles.settingsServiceLine}>
-            <ServiceLine icon={SiNetlify} service="netlify" />
-          </div>
+          <ServiceLine icon={SiVercel} service="vercel" />
+          <ServiceLine icon={SiNetlify} service="netlify" />
         </div>
       </div>
     </>

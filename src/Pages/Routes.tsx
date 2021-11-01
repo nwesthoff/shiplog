@@ -10,8 +10,7 @@ import Home from './Home';
 export const Routes = () => {
   const { user } = useAuth();
   const location = useLocation();
-  const { pathname, search } = location;
-  console.log(pathname + search);
+  const { pathname } = location;
 
   if (!user?.vercel && !user?.netlify && pathname !== paths.login) {
     return <Redirect to={paths.login} />;

@@ -19,13 +19,10 @@ async function vercelFetchDeploys(url: string, options?: RequestInit) {
       buildStart: dpl.buildingAt,
       buildEnd: dpl.ready,
       state: dpl.state,
-      creator: {
-        username: dpl.creator.username,
-      },
       meta: {
+        ghUsername: dpl.meta.githubCommitAuthorLogin,
         ghRepo: dpl.meta.githubRepo,
         ghCommitMessage: dpl.meta.githubCommitMessage,
-        ghCommitSha: dpl.meta.githubCommitSha,
         ghCommitRef: dpl.meta.githubCommitRef,
         ghOrg: dpl.meta.githubOrg,
       },
@@ -51,14 +48,11 @@ async function netlifyFetchDeploys(url: string, options?: RequestInit) {
       url: dpl.deploy_url,
       state: netlifyStateMap[dpl.state] || 'READY',
       admin_url: dpl.admin_url + '/deploys/' + dpl.id,
-      creator: {
-        username: dpl.committer || '',
-      },
       meta: {
+        ghUsername: dpl.committer,
         ghCommitMessage: dpl.title,
-        ghRepo: 'string',
-        ghCommitSha: 'string',
-        ghOrg: 'string',
+        ghRepo: dpl.commit_url?.replace('https://', '').split('/')[2],
+        ghOrg: dpl.commit_url?.replace('https://', '').split('/')[1],
         ghCommitRef: dpl.commit_ref || '',
       },
     };

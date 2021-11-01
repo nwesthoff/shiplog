@@ -13,9 +13,13 @@ export async function netlifyFetcher<T = any>(url: string, options?: RequestInit
   });
 
   if (!res.ok) {
+    const message =
+      res.status === 401
+        ? 'Not authorized or invalid token.'
+        : 'An error occurred while fetching the data.';
+
     const error = {
-      message: 'An error occurred while fetching the data.',
-      info: await res.json(),
+      message,
       status: res.status,
     };
     // Attach extra info to the error object.

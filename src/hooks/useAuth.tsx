@@ -12,12 +12,14 @@ const authContext = createContext<{
   login: (token: string, service: Service) => void;
   logout: (service?: Service) => void;
   user: { vercel?: VercelUser; netlify?: NetlifyUser } | null;
+  authError: string | null;
 }>({
   user: null,
   login: () => {},
   logout: () => {},
   isAuthenticated: false,
   loading: true,
+  authError: null,
 });
 
 export function ProvideAuth({ children }) {
@@ -32,39 +34,42 @@ export const useAuth = () => {
 function useProvideAuth() {
   const [vercelUser, setVercelUser] = useState<VercelUser>();
   const [netlifyUser, setNetlifyUser] = useState<NetlifyUser>();
+  const [authError, setAuthError] = useState<string | null>(null);
   const user = { vercel: vercelUser, netlify: netlifyUser };
   const isAuthenticated = !!user.vercel || !!user.netlify;
   const [loading, setLoading] = useState(true);
 
-  const login = async (token: string, service: Service | Service[]) => {
-    if (service === 'vercel') {
-      const res = await vercelFetcher('/www/user', {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
+  const login = async (token: string, service: Service) => {
+    setAuthError(null);
 
-      if (!res.error) {
+    try {
+      if (service === 'vercel') {
+        const res = await vercelFetcher('/www/user', {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+
         window.localStorage.setItem(localStore.vercelToken, token);
         setVercelUser(res.user);
-      } else if (res.error.code === 'forbidden') {
-        logout('vercel');
-      }
-    } else if ('netlify') {
-      const res = await netlifyFetcher('/users', {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
+      } else if ('netlify') {
+        const res = await netlifyFetcher('/users', {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
 
-      if (!res.error && res[0]) {
-        window.localStorage.setItem(localStore.netlifyToken, token);
-        setNetlifyUser(res[0]);
-      } else if (res.status === 401) {
-        logout('netlify');
+        if (res[0]) {
+          window.localStorage.setItem(localStore.netlifyToken, token);
+          setNetlifyUser(res[0]);
+        }
+      } else {
+        logout(service);
+        throw Error(`Service ${service} not found`);
       }
-    } else {
-      throw Error(`Service ${service} not found`);
+    } catch (e) {
+      console.log(e);
+      setAuthError((e as Error).message);
     }
   };
 
@@ -99,6 +104,7 @@ function useProvideAuth() {
   }, []);
 
   return {
+    authError,
     loading,
     login,
     user,

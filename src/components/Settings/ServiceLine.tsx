@@ -12,12 +12,12 @@ interface Props {
 }
 
 export default function ServiceLine({ service, icon: Icon }: Props): ReactElement {
-  const { logout, user, login } = useAuth();
+  const { logout, user, login, authError } = useAuth();
   const [token, setToken] = useState<string>('');
 
   return (
-    <>
-      <h4 style={{ textTransform: 'capitalize' }}>
+    <div className={styles.settingsServiceLine}>
+      <h4 style={{ textTransform: 'capitalize', marginTop: 'var(--space-8)' }}>
         {Icon && <Icon opacity={0.8} />} {service}
       </h4>
       {user?.[service] ? (
@@ -25,23 +25,23 @@ export default function ServiceLine({ service, icon: Icon }: Props): ReactElemen
           Log out
         </Button>
       ) : (
-        <form
-          style={{ display: 'flex', gap: 'var(--space-4)' }}
-          onSubmit={() => login(token, service)}
-        >
-          <input
-            onChange={(e) => {
-              setToken(e.target.value);
-            }}
-            className={styles.tokenInput}
-            value={token}
-            type="password"
-          />
-          <Button type="submit" onClick={() => login(token, service)}>
-            Log in
-          </Button>
+        <form onSubmit={() => login(token, service)}>
+          <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
+            <input
+              onChange={(e) => {
+                setToken(e.target.value);
+              }}
+              className={styles.tokenInput}
+              value={token}
+              type="password"
+            />
+            <Button type="submit" onClick={() => login(token, service)}>
+              Log in
+            </Button>
+          </div>
+          {authError && <span style={{ color: 'var(--color-red)' }}>{authError}</span>}
         </form>
       )}
-    </>
+    </div>
   );
 }

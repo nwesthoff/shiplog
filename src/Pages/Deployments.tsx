@@ -4,8 +4,7 @@ import DeploymentList from 'components/Deployments/DeploymentList';
 import { useAuth } from 'hooks/useAuth';
 import { useLocation, useParams } from 'react-router';
 import { useDeploymentList } from 'hooks/useDeploymentList';
-import { Service } from 'types/services';
-import { useProjectList } from 'hooks/useProjectList';
+import { Deployment, Service } from 'types/services';
 
 const PAGE_SIZE = 20;
 

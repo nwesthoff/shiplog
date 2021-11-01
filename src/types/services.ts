@@ -16,13 +16,10 @@ export type Deployment = {
   state: ReadyState;
   url: string;
   admin_url?: string;
-  creator: {
-    username: string;
-  };
   meta: {
+    ghUsername: string;
     ghCommitMessage?: string;
     ghRepo?: string;
-    ghCommitSha?: string;
     ghOrg?: string;
     ghCommitRef?: string;
   };
@@ -32,4 +29,9 @@ export type Project = {
   id: string;
   name: string;
   accountId: string;
+};
+
+export type Team = {
+  id: string;
+  name: string;
 };

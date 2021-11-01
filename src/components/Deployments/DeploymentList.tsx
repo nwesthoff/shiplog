@@ -36,17 +36,17 @@ export default function DeploymentList({
       window.localStorage.getItem(localStore.notifyAllBuilds) || 'true'
     );
 
-    const dplState = !!dpls?.find((dpl) => {
+    const anyDplBuilding = !!dpls?.find((dpl, i) => {
       if (!notifyAllBuilds && isAuthenticated) {
-        console.log(dpl.creator);
         return (
-          dpl.state === 'BUILDING' && dpl.creator.username === user?.vercel?.username
+          dpl.state === 'BUILDING' &&
+          (dpl.meta.ghUsername === user?.netlify?.full_name || user?.vercel?.username)
         );
       }
       return dpl.state === 'BUILDING';
     });
 
-    if (dplState) {
+    if (anyDplBuilding) {
       (window as any).ipc.send('buildState', 'building');
     } else {
       (window as any).ipc.send('buildState', 'ready');

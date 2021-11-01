@@ -22,7 +22,7 @@ export default function LoginFormService({
   setOpen,
   brandColor,
 }: Props): ReactElement {
-  const { login } = useAuth();
+  const { login, authError } = useAuth();
   const [tokenValue, setTokenValue] = useState('');
 
   async function handleLogin() {
@@ -71,6 +71,9 @@ export default function LoginFormService({
                       Login
                     </Button>
                   </div>
+                  {authError && (
+                    <span style={{ color: 'var(--color-red)' }}>{authError}</span>
+                  )}
                 </div>
               </form>
             </div>
