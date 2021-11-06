@@ -1,4 +1,4 @@
-name: Build
+name: Build Release
 
 on:
   push:
@@ -6,29 +6,40 @@ on:
       - main
 
 jobs:
-  build_on_mac:
-    runs-on: macOS-latest
+  build_release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+
     steps:
       - uses: actions/checkout@master
         with:
           ref: main
-      - name: Add MacOS Certificates
-        uses: apple-actions/import-codesign-certs@v1
-        with:
-          p12-file-base64: ${{ secrets.CERTIFICATE_MACOS_APP }}
-          p12-password: ${{ secrets.CERTIFICATE_MACOS_PASS }}
+      - if: matrix.os == 'macos-latest'
+          name: Add MacOS Certificates
+          uses: apple-actions/import-codesign-certs@v1
+          with:
+            p12-file-base64: ${{ secrets.CERTIFICATE_MACOS_APP }}
+            p12-password: ${{ secrets.CERTIFICATE_MACOS_PASS }}
       - uses: actions/setup-node@master
         with:
           node-version: 16
       - name: Install dependencies
         run: yarn install
-      - name: Build on MacOS
-        run: yarn make --arch x64,arm64
+      - if: ${{matrix.os == 'macos-latest'}}
+          name: Build
+            run: yarn make --arch x64,arm64
+      - if: ${{matrix.os == 'windows-latest'}}
+          name: Build on Windows
+            run: yarn make --arch x64
       - name: Release
         uses: marvinpinto/action-automatic-releases@latest
         with:
           files: |
             out/make/zip/darwin/**/*.zip
+            out/**/*.exe
           prerelease: false
           automatic_release_tag: 'latest'
           title: 'Main Build'
