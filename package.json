@@ -20,7 +20,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "package": "react-scripts build && electron-forge package",
-    "make": "NODE_ENV=production rimraf build && yarn build && yarn assets && tsc -p electron && electron-forge make"
+    "make": "cross-env NODE_ENV=production rimraf build && yarn build && yarn assets && tsc -p electron && electron-forge make"
   },
   "eslintConfig": {
     "extends": [
@@ -41,8 +41,8 @@
     ]
   },
   "dependencies": {
-    "electron-traywindow-positioner": "^1.1.0",
-    "electron-is-dev": "^2.0.0"
+    "electron-is-dev": "^2.0.0",
+    "electron-traywindow-positioner": "^1.1.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.61",
@@ -61,6 +61,7 @@
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "concurrently": "^6.2.1",
     "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
     "date-fns": "^2.24.0",
     "downshift": "^6.1.7",
     "electron": "^15.0.0",
