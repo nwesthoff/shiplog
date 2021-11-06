@@ -17,23 +17,23 @@ jobs:
       - uses: actions/checkout@master
         with:
           ref: main
-      - if: matrix.os == 'macos-latest'
-          name: Add MacOS Certificates
-          uses: apple-actions/import-codesign-certs@v1
-          with:
-            p12-file-base64: ${{ secrets.CERTIFICATE_MACOS_APP }}
-            p12-password: ${{ secrets.CERTIFICATE_MACOS_PASS }}
+      - name: Add MacOS Certificates
+        if: runner.os == 'macOS'
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.CERTIFICATE_MACOS_APP }}
+          p12-password: ${{ secrets.CERTIFICATE_MACOS_PASS }}
       - uses: actions/setup-node@master
         with:
           node-version: 16
       - name: Install dependencies
         run: yarn install
-      - if: ${{matrix.os == 'macos-latest'}}
-          name: Build
-            run: yarn make --arch x64,arm64
-      - if: ${{matrix.os == 'windows-latest'}}
-          name: Build on Windows
-            run: yarn make --arch x64
+      - name: Build
+        if: runner.os == 'macOS'
+        run: yarn make --arch x64,arm64
+      - name: Build on Windows
+        if: runner.os == 'Windows'
+        run: yarn make --arch x64
       - name: Release
         uses: marvinpinto/action-automatic-releases@latest
         with:
