@@ -11,8 +11,14 @@ async function fetchVercelTeams(url: string, options?: RequestInit) {
 }
 async function fetchNetlifyTeams(url: string, options?: RequestInit) {
   const res = await netlifyFetcher<any[]>(url, options);
+  const teams = res.map((team) => {
+    return {
+      id: team.slug,
+      name: team.name.replace(`'s team`, ''),
+    };
+  });
 
-  return { teams: res } as { teams: Team[] };
+  return { teams } as { teams: Team[] };
 }
 
 export const useTeamList = ({ service }: { service: Service }) => {

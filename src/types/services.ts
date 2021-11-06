@@ -6,7 +6,7 @@ export type User = {
   name: string;
 };
 
-export type ReadyState = 'BUILDING' | 'QUEUED' | 'READY';
+export type ReadyState = 'BUILDING' | 'QUEUED' | 'READY' | 'CANCELED' | 'ERROR';
 export type Deployment = {
   id: string;
   name: string;
@@ -15,7 +15,6 @@ export type Deployment = {
   buildEnd: number;
   state: ReadyState;
   url: string;
-  admin_url?: string;
   meta: {
     ghUsername: string;
     ghCommitMessage?: string;

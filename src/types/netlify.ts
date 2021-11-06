@@ -1,4 +1,4 @@
-export type NetlifyReadyState = 'ready' | 'error';
+export type NetlifyReadyState = string;
 
 export type NetlifyUser = {
   email: string;
@@ -27,22 +27,69 @@ export type NetlifyUser = {
 
 export type NetlifyDeployment = {
   id: string;
-  premium: false;
-  claimed: true;
-  name: string;
-  custom_domain: string;
-  url: string;
-  title: string;
-  deploy_time: number;
-  committer?: string;
-  commit_ref?: string;
-  commit_url?: string;
-  deploy_url: string;
-  admin_url: string;
-  screenshot_url: null;
-  created_at: string;
-  published_at: string;
-  updated_at: string;
+  site_id: string;
   user_id: string;
+  build_id: string;
+  state: string;
+  name: string;
+  url: string;
+  ssl_url: string;
+  admin_url: string;
+  deploy_url: string;
+  deploy_ssl_url: string;
+  screenshot_url: string;
+  review_id: 0;
+  draft: boolean;
+  required: string[];
+  required_functions: string[];
+  error_message: string;
+  branch: string;
+  commit_ref: string;
+  commit_url: string;
+  skipped: boolean;
+  created_at: string;
+  updated_at: string;
+  published_at: string;
+  title: string;
+  context: string;
+  locked: boolean;
+  review_url: string;
+  site_capabilities: {
+    large_media_enabled: boolean;
+  };
+  framework: string;
+};
+
+export type NetlifyBuild = {
+  branch: string;
+  build_time: number;
+  commit_ref: string;
+  commit_url: string;
+  committer: string;
+  context: string;
+  admin_url: string;
+  created_at: string;
+  custom_domain: string;
+  deploy_id: string;
+  deploy_ssl_url: string;
+  deploy_state: string;
+  deploy_time: number;
+  done: boolean;
+  error?: any;
+  error_message?: string;
+  id: string;
+  links: {
+    alias: string;
+    branch: null;
+    permalink: string;
+  };
+  priority: any;
+  review_id: number;
+  review_url: string;
+  sha: string;
+  site_id: string;
+  started_at: string;
+  subdomain: string;
+  title: string;
   state: NetlifyReadyState;
 };

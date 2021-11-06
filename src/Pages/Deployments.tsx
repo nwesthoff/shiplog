@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
-import { useVercelDeploymentList, useVercelTeam, useVercelUser } from 'services/vercel';
+import { useVercelTeam } from 'services/vercel';
 import DeploymentList from 'components/Deployments/DeploymentList';
 import { useAuth } from 'hooks/useAuth';
 import { useLocation, useParams } from 'react-router';
 import { useDeploymentList } from 'hooks/useDeploymentList';
-import { Deployment, Service } from 'types/services';
+import { Service } from 'types/services';
 
 const PAGE_SIZE = 20;
 

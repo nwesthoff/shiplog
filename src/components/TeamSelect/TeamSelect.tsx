@@ -9,16 +9,20 @@ import { useTeamList } from 'hooks/useTeamList';
 
 export default function TeamSelect(): ReactElement {
   const { user } = useAuth();
-  const { data: teamData } = useTeamList({ service: 'vercel' });
+  const { data: vercelTeamData } = useTeamList({ service: 'vercel' });
+  const { data: netlifyTeamData } = useTeamList({ service: 'netlify' });
   const history = useHistory();
   const location = useLocation();
   const teamsAndUser: { id: string; name: string; service: Service }[] = [];
-  user?.netlify &&
-    teamsAndUser.push({
-      id: user?.netlify?.id,
-      name: user?.netlify?.full_name,
-      service: 'netlify',
-    });
+
+  netlifyTeamData &&
+    teamsAndUser.push(
+      ...netlifyTeamData.teams.map((team) => ({
+        id: team.id,
+        name: team.name,
+        service: 'netlify' as Service,
+      }))
+    );
 
   user?.vercel &&
     teamsAndUser.push({
@@ -27,9 +31,9 @@ export default function TeamSelect(): ReactElement {
       service: 'vercel',
     });
 
-  teamData &&
+  vercelTeamData &&
     teamsAndUser.push(
-      ...teamData.teams.map((team) => {
+      ...vercelTeamData.teams.map((team) => {
         return { ...team, service: 'vercel' as Service };
       })
     );

@@ -3,7 +3,6 @@ import { ScrollProvider } from 'components/Layout/Layout';
 import RefreshChip from 'components/RefreshChip/RefreshChip';
 import { ReactElement, useContext } from 'react';
 import { useEffect } from 'react';
-import { useVercelUser } from 'services/vercel';
 import DeploymentItem from './DeploymentItem';
 import styles from './Deployments.module.scss';
 import { localStore } from 'config/localStorage';
@@ -36,12 +35,9 @@ export default function DeploymentList({
       window.localStorage.getItem(localStore.notifyAllBuilds) || 'true'
     );
 
-    const anyDplBuilding = !!dpls?.find((dpl, i) => {
-      if (!notifyAllBuilds && isAuthenticated) {
-        return (
-          dpl.state === 'BUILDING' &&
-          (dpl.meta.ghUsername === user?.netlify?.full_name || user?.vercel?.username)
-        );
+    const anyDplBuilding = !!dpls?.find((dpl) => {
+      if (!notifyAllBuilds && isAuthenticated && service !== 'netlify') {
+        return dpl.state === 'BUILDING' && dpl.meta.ghUsername === user?.vercel?.username;
       }
       return dpl.state === 'BUILDING';
     });
@@ -76,7 +72,7 @@ export default function DeploymentList({
               pageNext={() => setDplPages(dplPages + 1)}
               lastItem={dpls.length - 10 === i}
               team={teamName}
-              key={deployment.id}
+              key={deployment.id + '-' + i}
               {...deployment}
             />
           ))}

@@ -32,7 +32,7 @@ export default function DeploymentItem({
   ...props
 }: Deployment & Props): ReactElement {
   const itemRef = useRef<HTMLLIElement>(null);
-  const { service } = useParams<{ service: Service }>();
+  const { teamId, service } = useParams<{ teamId: string; service?: Service }>();
 
   useEffect(() => {
     if (lastItem && itemRef && pageNext) {
@@ -57,8 +57,13 @@ export default function DeploymentItem({
 
   const adminUrl = () => {
     return service === 'vercel'
-      ? `https://vercel.com/${team}/${props.name}/${props.id.replace('dpl_', '')}`
-      : props.admin_url;
+      ? team &&
+          props.name &&
+          props.id &&
+          `https://vercel.com/${team}/${props.name}/${props.id.replace('dpl_', '')}`
+      : teamId &&
+          props.id &&
+          `https://app.netlify.com/teams/${teamId}/builds/${props.id}`;
   };
 
   const [buildTime, setBuildTime] = useState(`${interval.minutes}m ${interval.seconds}s`);
@@ -82,7 +87,7 @@ export default function DeploymentItem({
     <li ref={itemRef} className={styles.dplLine} key={props.id + created}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <h3 className={styles.commitMessage}>{props.meta.ghCommitMessage}</h3>
-        {props.meta.ghCommitRef && (
+        {props.meta.ghCommitRef && props.meta.ghOrg && props.meta.ghRepo && (
           <div className={styles.commitRef}>
             <FiGitBranch style={{ color: 'var(--color-muted)' }} />
             <a
@@ -95,9 +100,9 @@ export default function DeploymentItem({
           </div>
         )}
         <h3 className={styles.projectProps}>
-          <span className={styles.projectName}>{props.name}</span>{' '}
-          {shortFormatDistance(formatDistanceStrict(created, new Date()))} ago by{' '}
-          {props.meta.ghUsername}
+          {props.name && <span className={styles.projectName}>{props.name} </span>}
+          {shortFormatDistance(formatDistanceStrict(created, new Date()))} ago{' '}
+          {props.meta.ghUsername && `by ${props.meta.ghUsername}`}
         </h3>
       </div>
       <div className={styles.dplSidebar}>

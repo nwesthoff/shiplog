@@ -3,9 +3,9 @@ import { vercelFetcher } from 'services/vercel';
 import { PublicConfiguration } from 'swr/dist/types';
 import useSWRInfinite from 'swr/infinite';
 import { KeyLoader } from 'swr';
-import { NetlifyDeployment } from 'types/netlify';
+import { NetlifyBuild, NetlifyDeployment } from 'types/netlify';
 import { Deployment, Service } from 'types/services';
-import { VercelDeployment } from 'types/vercel';
+import { ReadyState, VercelDeployment } from 'types/vercel';
 
 async function vercelFetchDeploys(url: string, options?: RequestInit) {
   const res = await vercelFetcher<{ deployments: VercelDeployment[] }>(url, options);
@@ -31,26 +31,29 @@ async function vercelFetchDeploys(url: string, options?: RequestInit) {
   return { ...res, deployments: dpls } as { deployments: Deployment[] };
 }
 
-const netlifyStateMap = {
+const netlifyStateMap: { [key: string]: ReadyState } = {
   ready: 'READY',
   error: 'ERROR',
+  building: 'BUILDING',
 };
 async function netlifyFetchDeploys(url: string, options?: RequestInit) {
-  const res = await netlifyFetcher<NetlifyDeployment[]>(url, options);
+  const res = await netlifyFetcher<NetlifyDeployment[] | NetlifyBuild[]>(url, options);
 
   const dpls = res.map((dpl) => {
     return {
-      id: dpl.id,
-      name: dpl.name,
+      id: dpl.deploy_id || dpl.id,
+      name: dpl.subdomain,
       created: new Date(dpl.created_at).getTime(),
       buildStart: new Date(dpl.created_at).getTime(),
       buildEnd: new Date(dpl.created_at).getTime() + dpl.deploy_time * 1000 || 0,
-      url: dpl.deploy_url,
-      state: netlifyStateMap[dpl.state] || 'READY',
-      admin_url: dpl.admin_url + '/deploys/' + dpl.id,
+      url: dpl.links.permalink,
+      state:
+        (dpl.state === 'error' && dpl.error_message?.includes('Canceled')
+          ? 'CANCELED'
+          : netlifyStateMap[dpl.state]) || 'READY',
       meta: {
         ghUsername: dpl.committer,
-        ghCommitMessage: dpl.title,
+        ghCommitMessage: dpl.title || 'Manual deploy',
         ghRepo: dpl.commit_url?.replace('https://', '').split('/')[2],
         ghOrg: dpl.commit_url?.replace('https://', '').split('/')[1],
         ghCommitRef: dpl.commit_ref || '',
@@ -73,11 +76,19 @@ const getVercelKey = (pageIndex, previousPageData, qs) => {
 };
 
 const getNetlifyKey = (pageIndex: number, previousPageData, { qs, urlParams }) => {
-  // first page, we don't have `previousPageData`
-  if (pageIndex === 0) return `sites/${urlParams.siteId}/deploys?${qs}`;
+  if (!urlParams.siteId) {
+    // first page, we don't have `previousPageData`
+    if (pageIndex === 0) return `${urlParams.teamId}/builds?${qs}`;
 
-  // add the cursor to the API endpoint
-  return `sites/${urlParams.siteId}/deploys?${qs}&page=${pageIndex}`;
+    // add the cursor to the API endpoint
+    return `${urlParams.teamId}/builds?${qs}&page=${pageIndex}`;
+  } else {
+    // first page, we don't have `previousPageData`
+    if (pageIndex === 0) return `sites/${urlParams.siteId}/deploys?${qs}`;
+
+    // add the cursor to the API endpoint
+    return `sites/${urlParams.siteId}/deploys?${qs}&page=${pageIndex}`;
+  }
 };
 
 export const useDeploymentList = ({
@@ -94,7 +105,7 @@ export const useDeploymentList = ({
   swrOptions?: Partial<PublicConfiguration>;
 }) => {
   const searchParams = new URLSearchParams();
-  const urlParams: { siteId?: string | null } = {};
+  const urlParams: { siteId?: string | null; teamId?: string | null } = {};
   if (service === 'vercel') {
     teamId?.includes('team_') && searchParams.append('teamId', teamId);
     projectId && searchParams.append('projectId', projectId);
@@ -102,13 +113,14 @@ export const useDeploymentList = ({
   } else if (service === 'netlify') {
     limit && searchParams.append('per_page', limit.toString());
     urlParams.siteId = projectId;
+    urlParams.teamId = teamId;
   }
   const qs = searchParams.toString();
   const fetcher = service === 'vercel' ? vercelFetchDeploys : netlifyFetchDeploys;
   let getPage: KeyLoader = null;
   if (service === 'vercel') {
     getPage = (page: number, prevData: any) => getVercelKey(page, prevData, qs);
-  } else if (projectId && service === 'netlify') {
+  } else if (service === 'netlify') {
     getPage = (page: number, prevData: any) =>
       getNetlifyKey(page, prevData, { qs, urlParams });
   }

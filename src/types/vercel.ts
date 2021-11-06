@@ -1,4 +1,4 @@
-export type ReadyState = string;
+export type ReadyState = 'BUILDING' | 'QUEUED' | 'READY' | 'ERROR';
 
 export type VercelUser = {
   uid: string;
