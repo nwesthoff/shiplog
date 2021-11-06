@@ -3,6 +3,7 @@ import { useSelect } from 'downshift';
 import { FiChevronDown } from 'react-icons/fi';
 import styles from './Select.module.scss';
 import { useLocation } from 'react-router';
+import { SiNetlify, SiVercel } from 'react-icons/si';
 
 interface Props {
   items: any[];
@@ -27,6 +28,7 @@ export default function Select({
     selectedItem: defaultSelectedItem,
     items,
     onSelectedItemChange,
+    itemToString: (item) => (item ? item.name : ''),
   });
 
   function itemBgColor(index, item) {
@@ -41,7 +43,9 @@ export default function Select({
     <div>
       <div>
         <button {...getToggleButtonProps()} className={styles.selectButton}>
-          {selectedItem?.name || 'Select Team'}
+          <div className={styles.selectButtonInnerText}>
+            {selectedItem?.name || 'Select Team'}
+          </div>
           <FiChevronDown style={{ color: 'var(--color-muted)' }} />
         </button>
       </div>
@@ -61,6 +65,12 @@ export default function Select({
                   })}
                   className={styles.selectItem}
                 >
+                  {team.service === 'vercel' && (
+                    <SiVercel style={{ minWidth: 'var(--space-16)' }} />
+                  )}
+                  {team.service === 'netlify' && (
+                    <SiNetlify style={{ minWidth: 'var(--space-16)' }} />
+                  )}
                   {team.name}
                 </li>
               ))}

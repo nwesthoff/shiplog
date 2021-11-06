@@ -10,7 +10,7 @@ import {
   VercelUser,
 } from 'types/vercel';
 
-export const vercelFetcher = async (url: string, options?: RequestInit) => {
+export async function vercelFetcher<T = any>(url: string, options?: RequestInit) {
   const token = window.localStorage.getItem('vercelToken');
 
   const res = await fetch(config.VERCEL_API_BASE + url, {
@@ -22,18 +22,36 @@ export const vercelFetcher = async (url: string, options?: RequestInit) => {
     ...options,
   });
 
-  return res.json();
-};
+  if (!res.ok) {
+    const message =
+      res.status === 403
+        ? 'Not authorized or invalid token.'
+        : 'An error occured while fetching the data.';
+
+    const error = {
+      message,
+      info: await res.json(),
+      status: res.status,
+    };
+    // Attach extra info to the error object.
+    throw error;
+  }
+
+  return res.json() as Promise<T>;
+}
 
 type TeamRequestProps = { teamId?: string };
 
-export const useVercelTeam = ({ teamId }: TeamRequestProps = {}) => {
+export const useVercelTeam = ({ teamId }: TeamRequestProps) => {
   const id = teamId?.includes('team_') ? teamId : '';
   return useSWR<VercelTeam>(teamId ? `/v1/teams/${id}` : null, vercelFetcher);
 };
 
 export const useVercelTeamList = () =>
-  useSWR<{ teams: VercelTeam[] }>('/v1/teams', vercelFetcher);
+  useSWR<{ teams: VercelTeam[] }>(
+    window.localStorage.getItem('vercelToken') && '/v1/teams',
+    vercelFetcher
+  );
 
 export const useVercelUser = () =>
   useSWR<{ user: VercelUser }>('/www/user', vercelFetcher);

@@ -67,7 +67,7 @@
     "electron-traywindow-positioner": "^1.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-icons": "^4.2.0",
+    "react-icons": "^4.3.1",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
     "rimraf": "^3.0.2",
@@ -83,7 +83,7 @@
         "name": "Shiplog",
         "icon": "icons/icon.icns",
         "osxSign": {
-          "identity": "Apple Development: Zeno Kapitein (Zeno Kapitein)"
+          "identity": "Apple Development: nils@nilswesthoff.com (4TUL43JS5F)"
         }
       },
       "makers": [

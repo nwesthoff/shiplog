@@ -1,13 +1,12 @@
 import { ReactElement, useState } from 'react';
-import Button from 'components/Button/Button';
-import { useAuth } from 'hooks/useAuth';
 import styles from './Settings.module.scss';
 import Header from 'components/Header/Header';
 import { localStore } from 'config/localStorage';
 import Toggle from 'components/Inputs/Toggle';
+import ServiceLine from './ServiceLine';
+import { SiNetlify, SiVercel } from 'react-icons/si';
 
 export default function Settings(): ReactElement {
-  const { logout } = useAuth();
   const [startAtLogin, setStartAtLogin] = useState(
     window.localStorage.getItem(localStore.startAtLogin) === 'true'
   );
@@ -55,8 +54,10 @@ export default function Settings(): ReactElement {
           <label htmlFor="startupCheckbox">Open on startup</label>{' '}
           <span style={{ color: 'var(--color-red)' }}>(beta)</span>
         </div>
+
         <div className={styles.settingsLine}>
-          <Button onClick={logout}>Log out</Button>
+          <ServiceLine icon={SiVercel} service="vercel" />
+          <ServiceLine icon={SiNetlify} service="netlify" />
         </div>
       </div>
     </>

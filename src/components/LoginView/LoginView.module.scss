@@ -1,0 +1,68 @@
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.tokenInput {
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--radius-small);
+}
+
+.formStep {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-16);
+  position: relative;
+  margin-bottom: var(--space-16);
+
+  p,
+  label {
+    color: var(--color-muted);
+  }
+
+  .formStepTitle {
+    margin-bottom: var(--space-4);
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.formRow {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.loginServiceTitle {
+  color: var(--color-foreground);
+  background-color: var(--color-barely);
+  border: none;
+  display: flex;
+  text-align: left;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--space-8);
+  width: 500px;
+  max-width: 100%;
+  border-radius: var(--radius-small);
+  padding: var(--space-8) var(--space-16);
+  margin-bottom: var(--space-16);
+  transition: all 200ms ease-out;
+
+  &:hover {
+    background-color: var(--color-faintly);
+  }
+}
+
+.loginServiceIcon {
+  height: var(--space-32);
+  width: var(--space-32);
+  color: var(--color-foreground);
+  display: grid;
+  place-items: center;
+}

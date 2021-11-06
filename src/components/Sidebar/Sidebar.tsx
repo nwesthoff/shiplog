@@ -4,15 +4,16 @@ import styles from './Sidebar.module.scss';
 import { paths } from 'config/paths';
 import { FiSettings } from 'react-icons/fi';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { useVercelProjectList } from 'services/vercel';
 import ProjectList from 'components/ProjectList/ProjectList';
+import { useProjectList } from 'hooks/useProjectList';
+import { Service } from 'types/services';
 
 export default function Sidebar(): ReactElement {
-  const { teamId } = useParams<{ teamId: string }>();
+  const { teamId, service } = useParams<{ teamId: string; service: Service }>();
   const { pathname } = useLocation();
   const history = useHistory();
 
-  const { data: projData } = useVercelProjectList({ teamId });
+  const { data: projData } = useProjectList({ teamId, service });
 
   return (
     <aside className={styles.sidebarWrapper} data-theme="dark">

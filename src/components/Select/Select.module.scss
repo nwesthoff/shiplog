@@ -1,3 +1,9 @@
+.selectButtonInnerText {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .selectButton {
   display: flex;
   align-items: center;
@@ -26,6 +32,9 @@
 }
 
 .selectItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
   border-radius: 3px;
   padding: var(--space-6) var(--space-16);
   cursor: pointer;

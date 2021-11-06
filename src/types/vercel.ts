@@ -1,4 +1,4 @@
-export type ReadyState = string;
+export type ReadyState = 'BUILDING' | 'QUEUED' | 'READY' | 'ERROR';
 
 export type VercelUser = {
   uid: string;
@@ -185,7 +185,7 @@ export type VercelBuild = {
   };
   public: false;
   ready: number;
-  readyState: string;
+  readyState: ReadyState;
   regions: [string];
   source: string;
   status: string;
