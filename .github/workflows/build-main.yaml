@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-11, windows-latest]
 
     steps:
       - uses: actions/checkout@master
@@ -28,7 +28,8 @@ jobs:
           node-version: 16
       - name: Install dependencies
         run: yarn install
-      - name: Build
+
+      - name: Build on MacOS
         if: runner.os == 'macOS'
         run: yarn make --arch x64,arm64
       - name: Upload macOS release build
@@ -37,6 +38,7 @@ jobs:
         with:
           name: shiplog.macos
           path: out/make/zip/darwin
+
       - name: Build on Windows
         if: runner.os == 'Windows'
         run: yarn make --arch x64
@@ -45,7 +47,7 @@ jobs:
         if: runner.os == 'Windows'
         with:
           name: shiplog.windows
-          path: out/Shiplog-win32-x64
+          path: out/Shiplog-win32-x64/Shiplog.exe
 
   run_release:
     needs: build_release
@@ -55,18 +57,12 @@ jobs:
       - name: Download binaries
         uses: actions/download-artifact@v2
 
-      - name: Rename binaries
-        run: |
-          mkdir shiplog
-          mv shiplog.windows/shiplog shiplog/shiplog.windows
-          mv shiplog.macos/shiplog shiplog/shiplog.macos
-
       - name: Release
         uses: marvinpinto/action-automatic-releases@latest
         with:
           files: |
-            shiplog/**/*.zip
-            shiplog/**/*.exe
+            shiplog.macos/**/*.zip
+            shiplog.windows/**/*.exe
           prerelease: false
           automatic_release_tag: 'latest'
           title: 'Main Build'
