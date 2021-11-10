@@ -4,7 +4,7 @@
 
 ![Shiplog in Light and Dark](/.github/assets/light-dark-shiplog.gif)
 
-A Mac Menu Bar application for watching your Vercel builds.
+A menubar application to monitor your Vercel & Netlify builds.
 
 The app is built using
 
