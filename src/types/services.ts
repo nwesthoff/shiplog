@@ -21,6 +21,7 @@ export type Deployment = {
     ghRepo?: string;
     ghOrg?: string;
     ghCommitRef?: string;
+    ghCommitBranch?: string;
   };
 };
 

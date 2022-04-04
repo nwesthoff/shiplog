@@ -16,13 +16,15 @@ const stateColorMap = {
 };
 
 interface Props {
-  team: string;
+  teamSlug?: string;
+  teamName: string;
   lastItem: boolean;
   pageNext?: VoidFunction;
 }
 
 export default function DeploymentItem({
-  team,
+  teamName,
+  teamSlug,
   created,
   state,
   buildEnd,
@@ -57,10 +59,10 @@ export default function DeploymentItem({
 
   const adminUrl = () => {
     return service === 'vercel'
-      ? team &&
+      ? teamName &&
           props.name &&
           props.id &&
-          `https://vercel.com/${team}/${props.name}/${props.id.replace('dpl_', '')}`
+          `https://vercel.com/${teamSlug}/${props.name}/${props.id.replace('dpl_', '')}`
       : teamId &&
           props.id &&
           `https://app.netlify.com/teams/${teamId}/builds/${props.id}`;
@@ -87,15 +89,17 @@ export default function DeploymentItem({
     <li ref={itemRef} className={styles.dplLine} key={props.id + created}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <h3 className={styles.commitMessage}>{props.meta.ghCommitMessage}</h3>
-        {props.meta.ghCommitRef && props.meta.ghOrg && props.meta.ghRepo && (
+        {props.meta.ghCommitBranch && props.meta.ghOrg && props.meta.ghRepo && (
           <div className={styles.commitRef}>
             <FiGitBranch style={{ color: 'var(--color-muted)' }} />
             <a
               target="blank"
-              href={`https://github.com/${props.meta.ghOrg}/${props.meta.ghRepo}/commit/${props.meta.ghCommitRef}`}
+              href={`https://github.com/${props.meta.ghOrg}/${
+                props.meta.ghRepo
+              }/tree/${encodeURIComponent(props.meta.ghCommitBranch)}`}
               className={styles.dplId}
             >
-              <h5 className={styles.dplCommitRefText}>{props.meta.ghCommitRef}</h5>
+              <h5 className={styles.dplCommitRefText}>{props.meta.ghCommitBranch}</h5>
             </a>
           </div>
         )}

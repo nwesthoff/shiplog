@@ -44,6 +44,9 @@ export default function DeploymentsPage(): ReactElement {
             ? teamData?.name || user?.vercel?.username || ''
             : user?.netlify?.full_name || ''
         }
+        teamSlug={
+          service === 'vercel' ? teamData?.slug || user?.vercel?.username : undefined
+        }
         dpls={flatDpls}
         dplValidating={dplValidating}
         dplPages={dplPages}
