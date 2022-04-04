@@ -17,6 +17,7 @@ interface Props {
   dplPages: number;
   setDplPages: (pages: number) => void;
   teamName: string;
+  teamSlug?: string;
 }
 
 export default function DeploymentList({
@@ -25,6 +26,7 @@ export default function DeploymentList({
   dplPages,
   setDplPages,
   teamName,
+  teamSlug,
 }: Props): ReactElement {
   const { service } = useParams<{ service: Service }>();
   const { layoutScrolled } = useContext(ScrollProvider);
@@ -71,7 +73,8 @@ export default function DeploymentList({
             <DeploymentItem
               pageNext={() => setDplPages(dplPages + 1)}
               lastItem={dpls.length - 10 === i}
-              team={teamName}
+              teamName={teamName}
+              teamSlug={teamSlug}
               key={deployment.id + '-' + i}
               {...deployment}
             />

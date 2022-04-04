@@ -23,7 +23,8 @@ async function vercelFetchDeploys(url: string, options?: RequestInit) {
         ghUsername: dpl.meta.githubCommitAuthorLogin,
         ghRepo: dpl.meta.githubRepo,
         ghCommitMessage: dpl.meta.githubCommitMessage,
-        ghCommitRef: dpl.meta.githubCommitRef,
+        ghCommitRef: dpl.meta.githubCommitSha,
+        ghCommitBranch: dpl.meta.githubCommitRef,
         ghOrg: dpl.meta.githubOrg,
       },
     };
@@ -57,6 +58,7 @@ async function netlifyFetchDeploys(url: string, options?: RequestInit) {
         ghRepo: dpl.commit_url?.replace('https://', '').split('/')[2],
         ghOrg: dpl.commit_url?.replace('https://', '').split('/')[1],
         ghCommitRef: dpl.commit_ref || '',
+        ghCommitBranch: dpl.branch || '',
       },
     };
   });
