@@ -9,7 +9,10 @@ import { Service } from 'types/services';
 const PAGE_SIZE = 20;
 
 export default function DeploymentsPage(): ReactElement {
-  const { teamId, service } = useParams<{ teamId: string; service: Service }>();
+  const { teamId, service = 'vercel' } = useParams<{
+    teamId: string;
+    service: Service;
+  }>();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const proj = params.get('proj');

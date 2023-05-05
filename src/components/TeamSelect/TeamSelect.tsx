@@ -1,7 +1,7 @@
 import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
 import { ReactElement } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { localStore } from 'config/localStorage';
 import Select from 'components/Select/Select';
 import { Service } from 'types/services';
@@ -11,7 +11,7 @@ export default function TeamSelect(): ReactElement {
   const { user } = useAuth();
   const { data: vercelTeamData } = useTeamList({ service: 'vercel' });
   const { data: netlifyTeamData } = useTeamList({ service: 'netlify' });
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const teamsAndUser: { id: string; name: string; service: Service }[] = [];
 
@@ -44,7 +44,7 @@ export default function TeamSelect(): ReactElement {
   function onChange(team) {
     if (team.id && !location.pathname.includes(team.id)) {
       localStorage.setItem(localStore.lastOpenTeam, JSON.stringify(team));
-      history.push(`${paths.team}/${team.service}/${team.id}`);
+      navigate(`${paths.team}/${team.service}/${team.id}`);
     }
   }
 

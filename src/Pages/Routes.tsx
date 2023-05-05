@@ -1,57 +1,69 @@
 import Deployments from './Deployments';
 import { paths } from 'config/paths';
 import { useAuth } from 'hooks/useAuth';
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Login from './Login';
 import Settings from '../components/Settings/Settings';
 import Layout from 'components/Layout/Layout';
 import Home from './Home';
+import { ReactElement, useEffect } from 'react';
 
-export const Routes = () => {
+export const RoutesPage = (): ReactElement => {
   const { user } = useAuth();
   const location = useLocation();
   const { pathname } = location;
+  const navigate = useNavigate();
 
-  if (!user?.vercel && !user?.netlify && pathname !== paths.login) {
-    return <Redirect to={paths.login} />;
-  }
+  useEffect(() => {
+    if (!user?.vercel && !user?.netlify && pathname !== paths.login) {
+      navigate(paths.login);
+    }
 
-  if ((user?.vercel || user?.netlify) && pathname === paths.login) {
-    return <Redirect to={paths.home} />;
-  }
+    if ((user?.vercel || user?.netlify) && pathname === paths.login) {
+      navigate(paths.home);
+    }
+  }, [user]);
 
   return (
-    <Switch location={location} key={pathname}>
-      <Route path={paths.home} exact>
-        <Home />
-      </Route>
-      <Route path={paths.settings} exact>
-        <Layout>
-          <Settings />
-        </Layout>
-      </Route>
+    <Routes location={location} key={pathname}>
+      <Route path={paths.home} element={<Home />} />
+      <Route
+        path={paths.settings}
+        element={
+          <Layout>
+            <Settings />
+          </Layout>
+        }
+      />
 
-      <Route exact path={paths.login}>
-        <Login />
-      </Route>
+      <Route path={paths.login} element={<Login />} />
 
-      <Route path={`${paths.team}/:service/:teamId/:projectId`}>
-        <Layout>
-          <Deployments />
-        </Layout>
-      </Route>
+      <Route
+        path={`${paths.team}/:service/:teamId/:projectId`}
+        element={
+          <Layout>
+            <Deployments />
+          </Layout>
+        }
+      />
 
-      <Route path={`${paths.team}/:service/:teamId`}>
-        <Layout>
-          <Deployments />
-        </Layout>
-      </Route>
+      <Route
+        path={`${paths.team}/:service/:teamId`}
+        element={
+          <Layout>
+            <Deployments />
+          </Layout>
+        }
+      />
 
-      <Route path={`${paths.team}/:service`} exact>
-        <Layout>
-          <Deployments />
-        </Layout>
-      </Route>
-    </Switch>
+      <Route
+        path={`${paths.team}/:service`}
+        element={
+          <Layout>
+            <Deployments />
+          </Layout>
+        }
+      />
+    </Routes>
   );
 };

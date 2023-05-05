@@ -20,7 +20,6 @@ const createWindow = () => {
     movable: false,
     title: 'Shiplog',
     webPreferences: {
-      nativeWindowOpen: true,
       devTools: isDev,
       preload: path.join(__dirname, 'preload.js'),
       backgroundThrottling: false,

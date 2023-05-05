@@ -3,15 +3,18 @@ import TeamSelect from 'components/TeamSelect/TeamSelect';
 import styles from './Sidebar.module.scss';
 import { paths } from 'config/paths';
 import { FiSettings } from 'react-icons/fi';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import ProjectList from 'components/ProjectList/ProjectList';
 import { useProjectList } from 'hooks/useProjectList';
 import { Service } from 'types/services';
 
 export default function Sidebar(): ReactElement {
-  const { teamId, service } = useParams<{ teamId: string; service: Service }>();
+  const { teamId, service = 'vercel' } = useParams<{
+    teamId: string;
+    service: Service;
+  }>();
   const { pathname } = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { data: projData } = useProjectList({ teamId, service });
 
@@ -33,8 +36,8 @@ export default function Sidebar(): ReactElement {
           }}
           onClick={
             pathname === paths.settings
-              ? history.goBack
-              : () => history.push(paths.settings)
+              ? () => navigate(-1)
+              : () => navigate(paths.settings)
           }
         >
           <div style={{ padding: 'var(--space-16)' }}>
